@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account ✦ AyaYa Store</title>
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site" id="site-header"></header>
+
+  <main>
+    <div class="container">
+      <div class="auth-wrap" id="auth-wrap"></div>
+    </div>
+  </main>
+
+  <footer class="site" id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    let mode = "login"; // or "signup"
+
+    function artSide() {
+      return `<div class="hero-art">
+        <div class="halo"></div>
+        <img class="mascot-main" src="assets/img/oc-giving.png" alt="Aya reaching out">
+        <span class="floaty" style="top:6%;left:10%">✦</span>
+        <span class="floaty" style="bottom:10%;right:8%;animation-delay:1.8s">💜</span>
+      </div>`;
+    }
+
+    function renderAccount() {
+      const wrap = document.getElementById("auth-wrap");
+      const user = currentUser();
+
+      if (user) {
+        wrap.innerHTML = `${artSide()}
+          <div class="form-card">
+            <h2>${t("welcomeBack")}, ${esc(user.name)}! 👋</h2>
+            <p class="hint">${t("accWho")}: <b>${esc(user.email)}</b><br>${t("memberSince")}: ${esc(user.joined || "2026")}</p>
+            ${user.isAdmin ? `<p class="form-msg ok">${t("accAdmin")}</p>
+              <a class="btn btn-primary" href="admin.html" style="margin-bottom:12px">${t("goAdmin")}</a><br>` : `<p class="hint">${t("yourOrders")}</p>`}
+            <button class="btn btn-ghost" onclick="logout()">${t("logout")}</button>
+          </div>`;
+        return;
+      }
+
+      const isLogin = mode === "login";
+      wrap.innerHTML = `${artSide()}
+        <div class="form-card">
+          <h2>${isLogin ? t("login") : t("signup")} ✦</h2>
+          <p class="hint">${t("accSub")}</p>
+          <form id="auth-form">
+            ${isLogin ? "" : `<div class="field"><label>${t("name")}</label><input id="f-name" type="text" maxlength="40"></div>`}
+            <div class="field"><label>${t("email")}</label><input id="f-email" type="email" autocomplete="email"></div>
+            <div class="field"><label>${t("password")}</label><input id="f-pass" type="password" autocomplete="${isLogin ? "current-password" : "new-password"}"></div>
+            ${isLogin ? "" : `<div class="field"><label>${t("confirm")}</label><input id="f-confirm" type="password" autocomplete="new-password"></div>`}
+            <p class="form-msg" id="form-msg"></p>
+            <button class="btn btn-primary" type="submit" style="width:100%">${isLogin ? t("login") : t("signup")} 🎮</button>
+          </form>
+          <p class="switch-auth">${isLogin ? t("noAcc") : t("haveAcc")}
+            <a id="switch-mode">${isLogin ? t("signup") : t("login")}</a></p>
+        </div>`;
+
+      document.getElementById("switch-mode").addEventListener("click", () => {
+        mode = isLogin ? "signup" : "login";
+        renderAccount();
+      });
+      document.getElementById("auth-form").addEventListener("submit", onSubmit);
+    }
+
+    function msg(text, ok) {
+      const el = document.getElementById("form-msg");
+      el.textContent = text;
+      el.className = "form-msg " + (ok ? "ok" : "err");
+    }
+
+    async function onSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById("f-email").value.trim().toLowerCase();
+      const pass = document.getElementById("f-pass").value;
+
+      if (mode === "signup") {
+        const name = document.getElementById("f-name").value.trim();
+        const confirm = document.getElementById("f-confirm").value;
+        if (!name || !email || !pass) return msg(t("errFill"));
+        if (!/^\S+@\S+\.\S+$/.test(email)) return msg(t("errEmail"));
+        if (pass.length < 6) return msg(t("errPassLen"));
+        if (pass !== confirm) return msg(t("errMatch"));
+        const users = getUsers();
+        if (users.some(u => u.email === email)) return msg(t("errExists"));
+        const user = { name, email, pass: await hashPass(pass), isAdmin: false, joined: new Date().toISOString().slice(0, 10) };
+        users.push(user);
+        setUsers(users);
+        LS.set("ayaya_session", { name, email, isAdmin: false, joined: user.joined });
+        msg(t("okSignup"), true);
+        confettiBurst();
+        mascotSay(t("okSignup"), "oc-giving.png");
+        setTimeout(() => { renderChrome(); renderAccount(); }, 1200);
+      } else {
+        if (!email || !pass) return msg(t("errFill"));
+        const users = getUsers();
+        const hashed = await hashPass(pass);
+        const user = users.find(u => u.email === email && u.pass === hashed);
+        if (!user) return msg(t("errLogin"));
+        LS.set("ayaya_session", { name: user.name, email: user.email, isAdmin: !!user.isAdmin, joined: user.joined });
+        renderChrome();
+        renderAccount();
+        mascotSay(t("welcomeBack") + ", " + user.name + "!", "oc-giving.png");
+      }
+    }
+
+    window.onLangChange = renderAccount;
+    document.addEventListener("DOMContentLoaded", renderAccount);
+  </script>
+</body>
+</html>

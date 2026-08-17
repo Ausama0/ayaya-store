@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store ✦ AyaYa Store</title>
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site" id="site-header"></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container" style="position:relative">
+        <h1><span class="grad" data-i18n="storeTitle"></span> 🛍️</h1>
+        <p data-i18n="storeSub"></p>
+        <img class="corner-oc" src="assets/img/oc-pointing.png" alt="">
+      </div>
+    </section>
+
+    <section class="block" style="padding-top:10px">
+      <div class="container">
+        <div class="searchbar">🔍 <input id="search" autocomplete="off"></div>
+        <div class="pills" id="cat-pills"></div>
+        <div class="grid" id="product-grid"></div>
+        <div class="empty-note" id="no-results" style="display:none">
+          <img src="assets/img/oc-thinking.png" alt="">
+          <p><b data-i18n="noResults"></b></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site" id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    const CATS = ["all", "paintings", "crafts", "stickers", "commissions"];
+    let activeCat = "all";
+    let query = "";
+
+    function productCard(p) {
+      const badge = !p.inStock
+        ? `<span class="badge soldout">${t("soldOut")}</span>`
+        : (p.featured ? `<span class="badge">${t("featBadge")}</span>` : "");
+      return `<article class="card reveal shown">
+        <div class="thumb"><img src="${esc(p.img)}" alt="${esc(loc(p, "name"))}" loading="lazy">${badge}</div>
+        <div class="card-body">
+          <h3>${esc(loc(p, "name"))}</h3>
+          <p class="desc">${esc(loc(p, "desc"))}</p>
+          <div class="card-foot">
+            <span class="price">$${p.price}</span>
+            ${p.inStock
+              ? `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">${t("addToCart")}</button>`
+              : `<button class="btn btn-danger btn-sm" disabled>${t("soldOut")}</button>`}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function renderStore() {
+      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+      document.getElementById("search").placeholder = t("searchPh");
+
+      document.getElementById("cat-pills").innerHTML = CATS.map(c =>
+        `<button class="pill${c === activeCat ? " active" : ""}" data-cat="${c}">${c === "all" ? t("allCat") : t(c)}</button>`
+      ).join("");
+      document.querySelectorAll("[data-cat]").forEach(b => b.addEventListener("click", () => {
+        activeCat = b.dataset.cat; renderStore();
+      }));
+
+      const q = query.trim().toLowerCase();
+      const items = getProducts().filter(p => {
+        const inCat = activeCat === "all" || p.category === activeCat;
+        const text = (loc(p, "name") + " " + loc(p, "desc") + " " + (p.en?.name || "") + " " + (p.ar?.name || "")).toLowerCase();
+        return inCat && (!q || text.includes(q));
+      });
+
+      document.getElementById("product-grid").innerHTML = items.map(productCard).join("");
+      const none = document.getElementById("no-results");
+      none.style.display = items.length ? "none" : "block";
+      if (!items.length && q) mascotSay(t("mascotSearchEmpty"), "oc-thinking.png");
+    }
+
+    document.getElementById("search").addEventListener("input", e => { query = e.target.value; renderStore(); });
+    window.onLangChange = renderStore;
+    document.addEventListener("DOMContentLoaded", renderStore);
+  </script>
+</body>
+</html>

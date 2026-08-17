@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyaYa Store ✦ Handcrafted gamer loot</title>
+  <meta name="description" content="Hand-painted canvases, handmade boxes, journals and stickers inspired by games and anime — made by Aya.">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site" id="site-header"></header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <h1><span data-i18n="heroTitle1"></span><br><span class="grad" data-i18n="heroTitle2"></span></h1>
+          <p class="sub" data-i18n="heroSub"></p>
+          <div class="hero-cta">
+            <a href="store.html" class="btn btn-primary" data-i18n="shopNow"></a>
+            <a href="blog.html" class="btn btn-ghost" data-i18n="readBlog"></a>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="halo"></div>
+          <img class="mascot-main" src="assets/img/logo.png" alt="Aya mascot giving a thumbs up">
+          <span class="floaty" style="top:8%;left:6%;animation-delay:.5s">🎮</span>
+          <span class="floaty" style="top:16%;right:4%;animation-delay:1.4s">✦</span>
+          <span class="floaty" style="bottom:12%;left:12%;animation-delay:2.2s">💜</span>
+          <span class="floaty" style="bottom:4%;right:14%;animation-delay:3s">🖌️</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee"><div class="marquee-track" id="marquee-track"></div></div>
+
+    <!-- Featured products -->
+    <section class="block">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <h2><span class="emoji">🗡️</span> <span data-i18n="featured"></span></h2>
+            <p data-i18n="featuredSub"></p>
+          </div>
+          <a class="btn btn-ghost btn-sm" href="store.html" data-i18n="viewAll"></a>
+        </div>
+        <div class="grid" id="featured-grid"></div>
+      </div>
+    </section>
+
+    <!-- About strip -->
+    <section class="block" style="padding-top:0">
+      <div class="container">
+        <div class="about-strip reveal">
+          <img src="assets/img/oc-cozy.png" alt="Aya sitting cozy">
+          <div>
+            <h2 data-i18n="aboutTitle"></h2>
+            <p data-i18n="aboutBody"></p>
+            <div class="socials" id="about-socials"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog preview -->
+    <section class="block" style="padding-top:0">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <h2><span class="emoji">✏️</span> <span data-i18n="latestPosts"></span></h2>
+            <p data-i18n="latestSub"></p>
+          </div>
+          <a class="btn btn-ghost btn-sm" href="blog.html" data-i18n="readBlog"></a>
+        </div>
+        <div class="post-grid" id="blog-preview"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site" id="site-footer"></footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    function productCard(p) {
+      const stockBadge = p.inStock
+        ? `<span class="badge">${t("featBadge")}</span>`
+        : `<span class="badge soldout">${t("soldOut")}</span>`;
+      return `<article class="card reveal">
+        <div class="thumb"><img src="${esc(p.img)}" alt="${esc(loc(p, "name"))}" loading="lazy">${stockBadge}</div>
+        <div class="card-body">
+          <h3>${esc(loc(p, "name"))}</h3>
+          <p class="desc">${esc(loc(p, "desc"))}</p>
+          <div class="card-foot">
+            <span class="price">$${p.price}</span>
+            ${p.inStock
+              ? `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">${t("addToCart")}</button>`
+              : `<button class="btn btn-danger btn-sm" disabled>${t("soldOut")}</button>`}
+          </div>
+        </div>
+      </article>`;
+    }
+
+    function renderHome() {
+      // i18n text nodes
+      document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+
+      // marquee (doubled for seamless loop)
+      const words = t("marquee");
+      const seq = words.map(w => `<span>✦ ${w}</span>`).join("");
+      document.getElementById("marquee-track").innerHTML = seq + seq;
+
+      // featured products
+      const feats = getProducts().filter(p => p.featured).slice(0, 4);
+      document.getElementById("featured-grid").innerHTML = feats.map(productCard).join("");
+
+      // blog preview (latest 3)
+      const posts = [...getPosts()].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+      document.getElementById("blog-preview").innerHTML = posts.map(p => `
+        <article class="post reveal">
+          <div class="thumb"><img src="${esc(p.img)}" alt="" loading="lazy"></div>
+          <div class="post-body">
+            <time>${p.date}</time>
+            <h3>${esc(loc(p, "title"))}</h3>
+            <p>${esc(loc(p, "body")).slice(0, 110)}…</p>
+            <a href="blog.html#${p.id}" class="tag">#${t(p.tag) !== p.tag ? t(p.tag) : p.tag}</a>
+          </div>
+        </article>`).join("");
+
+      const s = getSettings();
+      document.getElementById("about-socials").innerHTML = `
+        <a href="${esc(s.youtube)}" target="_blank" rel="noopener" class="btn btn-gold btn-sm">▶ ${t("aboutCta")}</a>
+        <a href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>
+        <a href="${esc(s.tiktok)}" target="_blank" rel="noopener">🎵 TikTok</a>`;
+
+      watchReveals();
+    }
+
+    window.onLangChange = renderHome;
+    document.addEventListener("DOMContentLoaded", renderHome);
+  </script>
+</body>
+</html>
