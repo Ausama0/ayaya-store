@@ -99,7 +99,11 @@ const I = {
     relatedTitle: "More loot you might like ✦",
     fMoreImages: "Photos (first = cover, you can add several)", addImage: "+ Add photo",
     fYoutubeProd: "YouTube video (optional — plays on the product page)",
-    watchOnIg: "📸 Open on Instagram", qtyLabel: "Quantity", buyNow: "Add to cart ✦"
+    watchOnIg: "📸 Open on Instagram", qtyLabel: "Quantity", buyNow: "Add to cart ✦",
+    fBuyerName: "Your name", fBuyerPhone: "Phone or Telegram username",
+    fBuyerNotes: "Notes — address, colors, details… (optional)",
+    errNeedContact: "Please write your name and a way to contact you 💜",
+    orderPreview: "Order preview (this is what Aya receives)"
   },
   ar: {
     brandTag: "مصنوع يدويًا بحب ومانا",
@@ -186,11 +190,15 @@ const I = {
     relatedTitle: "غنائم ثانية تعجبك ✦",
     fMoreImages: "الصور (الأولى = الغلاف، تكَدر تضيف أكثر من وحدة)", addImage: "+ أضف صورة",
     fYoutubeProd: "فيديو يوتيوب (اختياري — يشتغل بصفحة المنتج)",
-    watchOnIg: "📸 افتح بانستغرام", qtyLabel: "الكمية", buyNow: "أضف للسلة ✦"
+    watchOnIg: "📸 افتح بانستغرام", qtyLabel: "الكمية", buyNow: "أضف للسلة ✦",
+    fBuyerName: "اسمك", fBuyerPhone: "رقم الهاتف أو يوزر التيليغرام",
+    fBuyerNotes: "ملاحظات — العنوان، الألوان، التفاصيل… (اختياري)",
+    errNeedContact: "رجاءً اكتب اسمك وطريقة للتواصل وياك 💜",
+    orderPreview: "معاينة الطلب (هذا اللي راح يوصل لآية)"
   }
 };
 
-let LANG = LS.get("ayaya_lang", "en");
+let LANG = LS.get("ayaya_lang", "ar");
 /* admin wording overrides win over the built-in dictionary */
 const getTexts = () => {
   const base = (typeof DEFAULT_TEXTS !== "undefined") ? DEFAULT_TEXTS : { en: {}, ar: {} };
@@ -418,26 +426,58 @@ function changeQty(id, d) {
   renderCartDrawer();
 }
 
-function showOrderModal() {
-  const cart = getCart(), products = getProducts(), s = getSettings();
-  if (!cart.length) return;
-  let total = 0;
+/* The order message is always in Arabic (that's what Aya reads),
+   and structured to be as clear as possible. */
+function buildOrderText(buyer) {
+  const cart = getCart(), products = getProducts();
+  let total = 0, count = 0, n = 0;
   const lines = cart.map(ci => {
     const p = products.find(x => x.id === ci.id);
     if (!p) return "";
-    total += p.price * ci.qty;
-    return `• ${loc(p, "name")} ×${ci.qty} — $${p.price * ci.qty}`;
-  }).join("\n");
+    const sub = p.price * ci.qty;
+    total += sub; count += ci.qty; n++;
+    const name = (p.ar && p.ar.name) || p.en.name;
+    return `${n}) ${name}\n    الكمية: ${ci.qty} × $${p.price} = $${sub}`;
+  }).filter(Boolean).join("\n\n");
   const user = currentUser();
-  const orderText = `🛍 AyaYa Store order:\n${lines}\n${t("total")}: $${total}` + (user ? `\n👤 ${user.name}` : "");
+  const when = new Intl.DateTimeFormat("ar-IQ", { timeZone: "Asia/Baghdad", dateStyle: "full", timeStyle: "short" }).format(new Date());
+  const sep = "━━━━━━━━━━━━━━";
+  return [
+    "🛒 طلب جديد — متجر AyaYa ✦",
+    sep,
+    `📦 المنتجات (${count} ${count === 1 ? "قطعة" : "قطع"}):`,
+    "",
+    lines,
+    sep,
+    `💰 المجموع الكلي: $${total}`,
+    sep,
+    `👤 الاسم: ${buyer.name || "—"}`,
+    `📱 التواصل: ${buyer.phone || "—"}`,
+    buyer.notes ? `📝 ملاحظات: ${buyer.notes}` : null,
+    `📧 حساب الموقع: ${user ? `${user.name} (${user.email})` : "زائر بدون حساب"}`,
+    `🕐 وقت الطلب: ${when} (بغداد)`
+  ].filter(x => x !== null).join("\n");
+}
+
+function showOrderModal() {
+  const cart = getCart(), products = getProducts(), s = getSettings();
+  if (!cart.length) return;
+  const user = currentUser();
 
   const body = $("#cart-body"), foot = $("#cart-foot");
   const canBot = s.tgToken && s.tgChatId;
-  body.innerHTML = `<div style="display:flex;flex-direction:column;gap:14px">
-    <img src="${esc(img("orderArt"))}" style="width:120px;margin-inline:auto" alt="">
+  body.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px">
+    <img src="${esc(img("orderArt"))}" style="width:110px;margin-inline:auto" alt="">
     <h3 style="text-align:center">${t("orderTitle")}</h3>
     <p style="color:var(--muted);text-align:center">${t("orderHint")}</p>
-    <textarea readonly id="order-text" style="width:100%;min-height:140px;background:var(--bg-2);color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px;font-family:inherit">${esc(orderText)}</textarea>
+    <div class="field" style="margin:0"><label>👤 ${t("fBuyerName")}</label>
+      <input id="buyer-name" maxlength="60" value="${esc(user ? user.name : "")}"></div>
+    <div class="field" style="margin:0"><label>📱 ${t("fBuyerPhone")}</label>
+      <input id="buyer-phone" maxlength="60" placeholder="07xx xxx xxxx / @username"></div>
+    <div class="field" style="margin:0"><label>📝 ${t("fBuyerNotes")}</label>
+      <textarea id="buyer-notes" rows="2" maxlength="300"></textarea></div>
+    <label style="color:var(--purple-soft);font-weight:700;font-size:.92rem">${t("orderPreview")}</label>
+    <textarea readonly id="order-text" dir="rtl" style="width:100%;min-height:210px;background:var(--bg-2);color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px;font-family:inherit;font-size:.92rem"></textarea>
     ${canBot ? `<button class="btn btn-gold" id="tg-send">${t("tgSend")}</button>` : ""}
     ${s.tgUsername ? `<a class="btn btn-ghost" id="tg-dm" href="https://t.me/${esc(s.tgUsername)}" target="_blank" rel="noopener">${t("tgDm")}</a>` : ""}
     <button class="btn btn-primary" id="copy-order">${t("copyOrder")}</button>
@@ -446,7 +486,29 @@ function showOrderModal() {
       <a href="${esc(s.youtube)}" target="_blank" rel="noopener">▶ YouTube</a>
     </div></div>`;
   foot.innerHTML = "";
+
+  const buyer = () => ({
+    name: $("#buyer-name").value.trim(),
+    phone: $("#buyer-phone").value.trim(),
+    notes: $("#buyer-notes").value.trim()
+  });
+  const refreshPreview = () => { $("#order-text").value = buildOrderText(buyer()); };
+  ["buyer-name", "buyer-phone", "buyer-notes"].forEach(id => $("#" + id).addEventListener("input", refreshPreview));
+  refreshPreview();
+
+  const requireContact = () => {
+    const b = buyer();
+    if (!b.name || !b.phone) {
+      toast(t("errNeedContact"));
+      mascotSay(t("errNeedContact"), "mascotThinking");
+      ($("#buyer-name").value ? $("#buyer-phone") : $("#buyer-name")).focus();
+      return null;
+    }
+    return b;
+  };
+
   $("#copy-order").addEventListener("click", async () => {
+    if (!requireContact()) return;
     const ta = $("#order-text");
     ta.select();
     try { await navigator.clipboard.writeText(ta.value); } catch { document.execCommand("copy"); }
@@ -454,6 +516,7 @@ function showOrderModal() {
     confettiBurst();
   });
   if (canBot) $("#tg-send").addEventListener("click", async () => {
+    if (!requireContact()) return;
     const btn = $("#tg-send");
     btn.disabled = true;
     btn.textContent = t("tgSending");
