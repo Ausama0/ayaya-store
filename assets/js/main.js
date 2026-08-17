@@ -51,7 +51,7 @@ const I = {
     exportData: "⬇ Export data.js", exportHint: "Edits are saved in this browser. Export data.js and replace assets/js/data.js in the repo to publish them for everyone.",
     save: "Save", cancel: "Cancel", edit: "Edit", del: "Delete", confirmDel: "Delete this? No respawns!",
     thPhoto: "Photo", thName: "Name", thPrice: "Price", thCat: "Category", thStock: "Stock", thActions: "Actions", thDate: "Date", thTitle: "Title",
-    fPrice: "Price (USD)", fCat: "Category", fImg: "Image", fImgHint: "URL or upload", fFeatured: "Show on home page", fStock: "In stock",
+    fPrice: "Price (IQD — Iraqi Dinar)", fCat: "Category", fImg: "Image", fImgHint: "URL or upload", fFeatured: "Show on home page", fStock: "In stock",
     fNameEn: "Name (English)", fNameAr: "Name (Arabic)", fDescEn: "Description (English)", fDescAr: "Description (Arabic)",
     fTitleEn: "Title (English)", fTitleAr: "Title (Arabic)", fBodyEn: "Text (English)", fBodyAr: "Text (Arabic)",
     fDate: "Date", fTag: "Tag", fYoutube: "YouTube link (optional)", fLink: "Other link (optional)",
@@ -142,7 +142,7 @@ const I = {
     exportData: "⬇ تصدير data.js", exportHint: "التعديلات تنحفظ بهذا المتصفح. صدّر data.js واستبدل assets/js/data.js بالمستودع حتى تظهر للجميع.",
     save: "حفظ", cancel: "إلغاء", edit: "تعديل", del: "حذف", confirmDel: "متأكد من الحذف؟ ماكو ريسباون!",
     thPhoto: "الصورة", thName: "الاسم", thPrice: "السعر", thCat: "الفئة", thStock: "المخزون", thActions: "إجراءات", thDate: "التاريخ", thTitle: "العنوان",
-    fPrice: "السعر (دولار)", fCat: "الفئة", fImg: "الصورة", fImgHint: "رابط أو رفع", fFeatured: "يظهر بالصفحة الرئيسية", fStock: "متوفر",
+    fPrice: "السعر (دينار عراقي)", fCat: "الفئة", fImg: "الصورة", fImgHint: "رابط أو رفع", fFeatured: "يظهر بالصفحة الرئيسية", fStock: "متوفر",
     fNameEn: "الاسم (انكليزي)", fNameAr: "الاسم (عربي)", fDescEn: "الوصف (انكليزي)", fDescAr: "الوصف (عربي)",
     fTitleEn: "العنوان (انكليزي)", fTitleAr: "العنوان (عربي)", fBodyEn: "النص (انكليزي)", fBodyAr: "النص (عربي)",
     fDate: "التاريخ", fTag: "الوسم", fYoutube: "رابط يوتيوب (اختياري)", fLink: "رابط آخر (اختياري)",
@@ -212,6 +212,12 @@ const t = k => {
   return (I[LANG] && I[LANG][k]) ?? I.en[k] ?? k;
 };
 const loc = (obj, field) => (obj[LANG] && obj[LANG][field]) || (obj.en && obj.en[field]) || "";
+
+/* prices are in Iraqi Dinar (IQD) */
+const money = n => LANG === "ar"
+  ? `${Number(n).toLocaleString("en-US")} د.ع`
+  : `${Number(n).toLocaleString("en-US")} IQD`;
+const moneyAr = n => `${Number(n).toLocaleString("en-US")} د.ع`;
 
 /* replaceable site images */
 const getImages = () => ({ ...((typeof DEFAULT_IMAGES !== "undefined") ? DEFAULT_IMAGES : {}), ...LS.get("ayaya_images", {}) });
@@ -398,7 +404,7 @@ function renderCartDrawer() {
       <img src="${esc(p.img)}" alt="">
       <div class="ci-info">
         <h4>${esc(loc(p, "name"))}</h4>
-        <div class="ci-price">$${p.price} × ${ci.qty}</div>
+        <div class="ci-price">${money(p.price)} × ${ci.qty}</div>
         <div class="qty">
           <button data-dec="${p.id}">−</button><b>${ci.qty}</b><button data-inc="${p.id}">+</button>
         </div>
@@ -407,7 +413,7 @@ function renderCartDrawer() {
     </div>`;
   }).join("");
   foot.innerHTML = `
-    <div class="total-row"><span>${t("total")}</span><span class="price">$${total}</span></div>
+    <div class="total-row"><span>${t("total")}</span><span class="price">${money(total)}</span></div>
     <button class="btn btn-gold" id="checkout-btn">${t("checkout")}</button>`;
 
   $$("[data-inc]", body).forEach(b => b.addEventListener("click", () => changeQty(b.dataset.inc, 1)));
@@ -437,7 +443,7 @@ function buildOrderText(buyer) {
     const sub = p.price * ci.qty;
     total += sub; count += ci.qty; n++;
     const name = (p.ar && p.ar.name) || p.en.name;
-    return `${n}) ${name}\n    الكمية: ${ci.qty} × $${p.price} = $${sub}`;
+    return `${n}) ${name}\n    الكمية: ${ci.qty} × ${moneyAr(p.price)} = ${moneyAr(sub)}`;
   }).filter(Boolean).join("\n\n");
   const user = currentUser();
   const when = new Intl.DateTimeFormat("ar-IQ", { timeZone: "Asia/Baghdad", dateStyle: "full", timeStyle: "short" }).format(new Date());
@@ -449,7 +455,7 @@ function buildOrderText(buyer) {
     "",
     lines,
     sep,
-    `💰 المجموع الكلي: $${total}`,
+    `💰 المجموع الكلي: ${moneyAr(total)}`,
     sep,
     `👤 الاسم: ${buyer.name || "—"}`,
     `📱 التواصل: ${buyer.phone || "—"}`,

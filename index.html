@@ -100,7 +100,7 @@
           <h3><a href="${url}" style="color:inherit">${esc(loc(p, "name"))}</a></h3>
           <p class="desc">${esc(loc(p, "desc"))}</p>
           <div class="card-foot">
-            <span class="price">$${p.price}</span>
+            <span class="price">${money(p.price)}</span>
             ${p.inStock
               ? `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">${t("addToCart")}</button>`
               : `<button class="btn btn-danger btn-sm" disabled>${t("soldOut")}</button>`}

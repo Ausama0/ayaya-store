@@ -79,7 +79,7 @@
               ${!p.inStock ? `<span class="tag" style="color:var(--magenta)">${t("soldOut")}</span>` : ""}
             </div>
             <h1>${esc(loc(p, "name"))}</h1>
-            <span class="price">$${p.price}</span>
+            <span class="price">${money(p.price)}</span>
             <p class="desc">${esc(loc(p, "desc"))}</p>
             ${p.inStock ? `
               <div class="product-meta" style="align-items:center">
@@ -122,7 +122,7 @@
           <div class="card-body">
             <h3><a href="product.html?id=${encodeURIComponent(r.id)}" style="color:inherit">${esc(loc(r, "name"))}</a></h3>
             <div class="card-foot">
-              <span class="price">$${r.price}</span>
+              <span class="price">${money(r.price)}</span>
               ${r.inStock ? `<button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}')">${t("addToCart")}</button>` : ""}
             </div>
           </div>
