@@ -236,17 +236,8 @@ header.site {
 .marquee span {
   display: inline-block;
   unicode-bidi: isolate;
-  padding: 0 6px;
+  padding: 0 30px;
 }
-
-.marquee span::after {
-  content: "💜";
-  display: inline-block;
-  margin: 0 22px 0 0;
-  transform: translateY(1px);
-}
-
-html[dir="rtl"] .marquee span::after { margin: 0 0 0 22px; }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
 
