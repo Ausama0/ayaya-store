@@ -226,14 +226,37 @@ header.site {
   border-block: 1px solid var(--line);
   background: var(--bg-2);
   overflow: hidden; white-space: nowrap; direction: ltr;
-  padding: 10px 0; font-weight: 800; color: var(--purple-soft);
+  padding: 8px 0; font-weight: 800; color: var(--purple-soft);
+  line-height: 2; /* room for Arabic ascenders & diacritics */
 }
 
 .marquee-track { display: inline-block; animation: marquee 30s linear infinite; }
 
-.marquee span { margin: 0 26px; }
+/* each phrase is bidi-isolated so Arabic renders intact inside the LTR ticker */
+.marquee span {
+  display: inline-block;
+  unicode-bidi: isolate;
+  padding: 0 6px;
+}
+
+.marquee span::after {
+  content: "💜";
+  display: inline-block;
+  margin: 0 22px 0 0;
+  transform: translateY(1px);
+}
+
+html[dir="rtl"] .marquee span::after { margin: 0 0 0 22px; }
 
 @keyframes marquee { to { transform: translateX(-50%); } }
+
+/* on the Arabic site the ticker flows the natural RTL way */
+html[dir="rtl"] .marquee-track { animation-name: marquee-rtl; }
+
+@keyframes marquee-rtl {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
 
 /* ---------- Sections ---------- */
 section.block { padding: 68px 0; }

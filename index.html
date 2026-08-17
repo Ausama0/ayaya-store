@@ -115,7 +115,7 @@
 
       // marquee (doubled for seamless loop)
       const words = t("marquee");
-      const seq = words.map(w => `<span>${w}</span>`).join("");
+      const seq = words.map(w => `<span dir="auto">${esc(w)}</span>`).join("");
       document.getElementById("marquee-track").innerHTML = seq + seq;
 
       // featured products
