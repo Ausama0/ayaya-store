@@ -437,7 +437,6 @@
         <p class="hint" style="color:var(--muted)">${t("tgHint")}</p>
         <div class="field"><label>${t("sTgToken")}</label><input id="s-tgtoken" value="${esc(s.tgToken)}" placeholder="123456:ABC-DEF…"></div>
         <div class="field"><label>${t("sTgChatId")}</label><input id="s-tgchatid" value="${esc(s.tgChatId)}" placeholder="123456789"></div>
-        <div class="field"><label>${t("sTgUsername")}</label><input id="s-tgusername" value="${esc(s.tgUsername)}" placeholder="ayaya_store"></div>
         <hr style="border-color:var(--line);margin:20px 0">
         <div class="field"><label>🔑 ${t("password")} (admin)</label><input id="s-pass" type="password" placeholder="••••••"></div>
         <button class="btn btn-primary" id="save-settings">${t("save")}</button>
@@ -450,7 +449,7 @@
           discord: document.getElementById("s-discord").value.trim(),
           tgToken: document.getElementById("s-tgtoken").value.trim(),
           tgChatId: document.getElementById("s-tgchatid").value.trim(),
-          tgUsername: document.getElementById("s-tgusername").value.trim().replace(/^@/, "")
+          tgUsername: ""
         });
         const newPass = document.getElementById("s-pass").value;
         if (newPass) {

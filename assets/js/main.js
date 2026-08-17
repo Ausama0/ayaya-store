@@ -18,7 +18,7 @@ const I = {
     brandTag: "handmade with love & mana",
     navHome: "Home", navStore: "Store", navBlog: "Blog", navAbout: "About", navAccount: "Account", navAdmin: "Admin", navCustom: "Custom orders 🎨",
     coTitle: "Custom Orders", coSub: "A painting, a figure, a keychain, a print… anything from any game or anime — made just for you.",
-    coHow: "How it works", coStep1: "Write every detail of what you want", coStep2: "The order flies to Aya's Telegram", coStep3: "Aya reads it and replies with the price & time",
+    coHow: "How it works", coStep1: "Write every detail of what you want", coStep2: "Your request goes straight to Aya", coStep3: "Aya reads it and replies with the price & time",
     coPriceNote: "There's no fixed price here — Aya sets the price after reading your request, and gets back to you before anything starts. 💜",
     coType: "What do you want?", coTypePh: "Painting / figure / keychain / print / something else…",
     coDetails: "The full details (required!)",
@@ -26,7 +26,7 @@ const I = {
     coDetailsHint: "The character/game, the size, colors, materials, deadline — the more details, the better the price and result!",
     coImage: "Reference photo (optional)",
     coNeedDetails: "Please write the full details (a bit more than that!) so Aya can price it 💜",
-    coSent: "Your request flew to Aya! She'll read it and reply with a price 🎨💜",
+    coSent: "Your request reached Aya! She'll read it and reply with a price 🎨💜",
     coStoreBanner: "Didn't find what you're looking for?", coStoreBannerBtn: "Make a custom order 🎨",
     coPriceTbd: "يتحدد بعد المراجعة",
     heroTitle1: "Made by hand, with love —", heroTitle2: "from Aya's desk to your home",
@@ -104,19 +104,17 @@ const I = {
     imgSlot_mascotGrumpy: "Corner mascot (grumpy)", imgSlot_storeCorner: "Store page corner art",
     imgSlot_blogCorner: "Blog page corner art", imgSlot_accountArt: "Account page art",
     imgSlot_orderArt: "Order screen art", imgSlot_cartEmpty: "Empty cart art",
-    tgSend: "Send via Telegram 🚀", tgSending: "Sending…",
-    tgSent: "Order flew to Aya's Telegram! 🎉 She'll reply soon 💜",
+    tgSend: "Send the order 🚀", tgSending: "Sending…",
+    tgSent: "Your order reached Aya! 🎉 She'll contact you soon 💜",
     tgFail: "Couldn't send automatically — copy the order and send it by DM instead 🙏",
-    tgDm: "💬 DM on Telegram",
     sTgToken: "Telegram bot token (from @BotFather)", sTgChatId: "Telegram chat id (from @userinfobot)",
-    sTgUsername: "Telegram username (without @) — for the DM button",
     tgHint: "With token + chat id, orders are sent straight to your Telegram. Note: on a public site the token is visible to visitors — use a bot made just for orders, and revoke it in @BotFather if it's ever abused.",
     productNotFound: "This item vanished into the gloom… 🌫️", backToStore: "← Back to the store",
     relatedTitle: "More loot you might like",
     fMoreImages: "Photos (first = cover, you can add several)", addImage: "+ Add photo",
     fYoutubeProd: "YouTube video (optional — plays on the product page)",
     watchOnIg: "📸 Open on Instagram", qtyLabel: "Quantity", buyNow: "Add to cart",
-    fBuyerName: "Your name", fBuyerPhone: "Phone or Telegram username",
+    fBuyerName: "Your name", fBuyerPhone: "Phone or Instagram username",
     fBuyerNotes: "Notes — address, colors, details… (optional)",
     errNeedContact: "Please write your name and a way to contact you 💜",
     orderPreview: "Order preview (this is what Aya receives)"
@@ -125,7 +123,7 @@ const I = {
     brandTag: "مصنوع يدويًا بحب ومانا",
     navHome: "الرئيسية", navStore: "المتجر", navBlog: "المدونة", navAbout: "من أنا", navAccount: "حسابي", navAdmin: "الإدارة", navCustom: "طلبات خاصة 🎨",
     coTitle: "الطلبات الخاصة", coSub: "لوحة، مجسم، ميدالية، مطبوعة… أي شي من أي لعبة أو أنمي — يُصنع خصيصًا إلك.",
-    coHow: "شلون تشتغل؟", coStep1: "اكتب كل تفاصيل اللي تريده", coStep2: "الطلب يطير لتيليغرام آية", coStep3: "آية تقرأه وترد عليك بالسعر والمدة",
+    coHow: "شلون تشتغل؟", coStep1: "اكتب كل تفاصيل اللي تريده", coStep2: "طلبك يوصل لآية مباشرة", coStep3: "آية تقرأه وترد عليك بالسعر والمدة",
     coPriceNote: "ما كو سعر ثابت هنا — السعر تحدده آية بعد ما تقرأ طلبك، وترد عليك قبل ما يبدي أي شي. 💜",
     coType: "شنو تريد؟", coTypePh: "لوحة / مجسم / ميدالية / مطبوعة / شي ثاني…",
     coDetails: "التفاصيل كاملة (إلزامي!)",
@@ -133,7 +131,7 @@ const I = {
     coDetailsHint: "الشخصية/اللعبة، الحجم، الألوان، الخامات، الموعد — كل ما زادت التفاصيل، صار السعر والنتيجة أدق!",
     coImage: "صورة مرجعية (اختياري)",
     coNeedDetails: "رجاءً اكتب التفاصيل كاملة (شوية أكثر من هيج!) حتى آية تكَدر تسعّرها 💜",
-    coSent: "طلبك طار لآية! راح تقرأه وترد عليك بالسعر 🎨💜",
+    coSent: "طلبك وصل لآية! راح تقرأه وترد عليك بالسعر 🎨💜",
     coStoreBanner: "ما لكيت اللي تدور عليه؟", coStoreBannerBtn: "سوّي طلب خاص 🎨",
     coPriceTbd: "يتحدد بعد المراجعة",
     heroTitle1: "أشياء مصنوعة بحب،", heroTitle2: "من ميز آية… لبيتك",
@@ -211,19 +209,17 @@ const I = {
     imgSlot_mascotGrumpy: "ماسكوت الزاوية (معصبة)", imgSlot_storeCorner: "صورة زاوية المتجر",
     imgSlot_blogCorner: "صورة زاوية المدونة", imgSlot_accountArt: "صورة صفحة الحساب",
     imgSlot_orderArt: "صورة شاشة الطلب", imgSlot_cartEmpty: "صورة السلة الفارغة",
-    tgSend: "أرسل عبر تيليغرام 🚀", tgSending: "جاري الإرسال…",
-    tgSent: "الطلب طار لتيليغرام آية! 🎉 راح ترد عليك قريبًا 💜",
+    tgSend: "دز الطلب 🚀", tgSending: "جاري الإرسال…",
+    tgSent: "طلبك وصل لآية! 🎉 راح تتواصل وياك قريبًا 💜",
     tgFail: "ما كَدرنا نرسل تلقائيًا — انسخ الطلب ودزه برسالة 🙏",
-    tgDm: "💬 راسلني على تيليغرام",
     sTgToken: "توكن بوت تيليغرام (من @BotFather)", sTgChatId: "معرف المحادثة (من @userinfobot)",
-    sTgUsername: "يوزر تيليغرام (بدون @) — لزر المراسلة",
     tgHint: "بوجود التوكن والمعرف، الطلبات توصل مباشرة لتيليغرامك. ملاحظة: بموقع عام التوكن يظهر للزوار — استخدم بوت مخصص للطلبات بس، وسوّي له revoke من @BotFather إذا صار سوء استخدام.",
     productNotFound: "هذي القطعة اختفت بالظلال… 🌫️", backToStore: "→ رجوع للمتجر",
     relatedTitle: "غنائم ثانية تعجبك",
     fMoreImages: "الصور (الأولى = الغلاف، تكَدر تضيف أكثر من وحدة)", addImage: "+ أضف صورة",
     fYoutubeProd: "فيديو يوتيوب (اختياري — يشتغل بصفحة المنتج)",
     watchOnIg: "📸 افتح بانستغرام", qtyLabel: "الكمية", buyNow: "أضف للسلة",
-    fBuyerName: "اسمك", fBuyerPhone: "رقم الهاتف أو يوزر التيليغرام",
+    fBuyerName: "اسمك", fBuyerPhone: "رقم الهاتف أو يوزر الانستغرام",
     fBuyerNotes: "ملاحظات — العنوان، الألوان، التفاصيل… (اختياري)",
     errNeedContact: "رجاءً اكتب اسمك وطريقة للتواصل وياك 💜",
     orderPreview: "معاينة الطلب (هذا اللي راح يوصل لآية)"
@@ -375,7 +371,6 @@ function renderChrome() {
           ${s.instagram ? `<a href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>` : ""}
           ${s.tiktok ? `<a href="${esc(s.tiktok)}" target="_blank" rel="noopener">🎵 TikTok</a>` : ""}
           ${s.discord ? `<a href="${esc(s.discord)}" target="_blank" rel="noopener">💬 Discord</a>` : ""}
-          ${s.tgUsername ? `<a href="https://t.me/${esc(s.tgUsername)}" target="_blank" rel="noopener">✈️ Telegram</a>` : ""}
         </div>
         <p class="note">${t("footNote")}<br>© 2026 ${t("rights")}</p>
       </div>
@@ -512,13 +507,12 @@ function showOrderModal() {
     <div class="field" style="margin:0"><label>👤 ${t("fBuyerName")}</label>
       <input id="buyer-name" maxlength="60" value="${esc(user ? user.name : "")}"></div>
     <div class="field" style="margin:0"><label>📱 ${t("fBuyerPhone")}</label>
-      <input id="buyer-phone" maxlength="60" placeholder="07xx xxx xxxx / @username"></div>
+      <input id="buyer-phone" maxlength="60" placeholder="07xx xxx xxxx / @insta"></div>
     <div class="field" style="margin:0"><label>📝 ${t("fBuyerNotes")}</label>
       <textarea id="buyer-notes" rows="2" maxlength="300"></textarea></div>
     <label style="color:var(--purple-soft);font-weight:700;font-size:.92rem">${t("orderPreview")}</label>
     <textarea readonly id="order-text" dir="rtl" style="width:100%;min-height:210px;background:var(--bg-2);color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px;font-family:inherit;font-size:.92rem"></textarea>
     ${canBot ? `<button class="btn btn-gold" id="tg-send">${t("tgSend")}</button>` : ""}
-    ${s.tgUsername ? `<a class="btn btn-ghost" id="tg-dm" href="https://t.me/${esc(s.tgUsername)}" target="_blank" rel="noopener">${t("tgDm")}</a>` : ""}
     <button class="btn btn-primary" id="copy-order">${t("copyOrder")}</button>
     <div class="socials" style="justify-content:center">
       <a href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>

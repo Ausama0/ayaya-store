@@ -37,7 +37,7 @@
           <div class="field"><label>👤 <span id="l-name"></span></label>
             <input id="co-name" maxlength="60"></div>
           <div class="field"><label>📱 <span id="l-phone"></span></label>
-            <input id="co-phone" maxlength="60" placeholder="07xx xxx xxxx / @username"></div>
+            <input id="co-phone" maxlength="60" placeholder="07xx xxx xxxx / @insta"></div>
           <button class="btn btn-primary" id="co-send" style="width:100%;font-size:1.05rem"></button>
           <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap" id="co-fallbacks"></div>
         </div>
@@ -106,7 +106,6 @@
       const s = getSettings();
       document.getElementById("co-send").textContent = (s.tgToken && s.tgChatId) ? t("tgSend") : t("copyOrder");
       document.getElementById("co-fallbacks").innerHTML = `
-        ${s.tgUsername ? `<a class="btn btn-ghost btn-sm" href="https://t.me/${esc(s.tgUsername)}" target="_blank" rel="noopener">${t("tgDm")}</a>` : ""}
         <a class="btn btn-ghost btn-sm" href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>`;
       const user = currentUser();
       if (user && !document.getElementById("co-name").value) document.getElementById("co-name").value = user.name;
