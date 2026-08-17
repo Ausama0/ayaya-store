@@ -16,7 +16,19 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": 
 const I = {
   en: {
     brandTag: "handmade with love & mana",
-    navHome: "Home", navStore: "Store", navBlog: "Blog", navAbout: "About", navAccount: "Account", navAdmin: "Admin",
+    navHome: "Home", navStore: "Store", navBlog: "Blog", navAbout: "About", navAccount: "Account", navAdmin: "Admin", navCustom: "Custom orders 🎨",
+    coTitle: "Custom Orders", coSub: "A painting, a figure, a keychain, a print… anything from any game or anime — made just for you.",
+    coHow: "How it works", coStep1: "Write every detail of what you want", coStep2: "The order flies to Aya's Telegram", coStep3: "Aya reads it and replies with the price & time",
+    coPriceNote: "There's no fixed price here — Aya sets the price after reading your request, and gets back to you before anything starts. 💜",
+    coType: "What do you want?", coTypePh: "Painting / figure / keychain / print / something else…",
+    coDetails: "The full details (required!)",
+    coDetailsPh: "Example: a canvas painting of Hornet from Silksong, A4 size with a frame, purple background, I want it as a gift wrapped nicely…",
+    coDetailsHint: "The character/game, the size, colors, materials, deadline — the more details, the better the price and result!",
+    coImage: "Reference photo (optional)",
+    coNeedDetails: "Please write the full details (a bit more than that!) so Aya can price it 💜",
+    coSent: "Your request flew to Aya! She'll read it and reply with a price 🎨💜",
+    coStoreBanner: "Didn't find what you're looking for?", coStoreBannerBtn: "Make a custom order 🎨",
+    coPriceTbd: "يتحدد بعد المراجعة",
     heroTitle1: "Made by hand, with love —", heroTitle2: "from Aya's desk to your home",
     heroSub: "Hand-painted canvases, hand-made boxes, journals and prints — inspired by the games and anime we love. Every piece is drawn, painted and glued together by one very caffeinated gamer.",
     shopNow: "Browse the loot", readBlog: "Read the blog",
@@ -111,7 +123,19 @@ const I = {
   },
   ar: {
     brandTag: "مصنوع يدويًا بحب ومانا",
-    navHome: "الرئيسية", navStore: "المتجر", navBlog: "المدونة", navAbout: "من أنا", navAccount: "حسابي", navAdmin: "الإدارة",
+    navHome: "الرئيسية", navStore: "المتجر", navBlog: "المدونة", navAbout: "من أنا", navAccount: "حسابي", navAdmin: "الإدارة", navCustom: "طلبات خاصة 🎨",
+    coTitle: "الطلبات الخاصة", coSub: "لوحة، مجسم، ميدالية، مطبوعة… أي شي من أي لعبة أو أنمي — يُصنع خصيصًا إلك.",
+    coHow: "شلون تشتغل؟", coStep1: "اكتب كل تفاصيل اللي تريده", coStep2: "الطلب يطير لتيليغرام آية", coStep3: "آية تقرأه وترد عليك بالسعر والمدة",
+    coPriceNote: "ما كو سعر ثابت هنا — السعر تحدده آية بعد ما تقرأ طلبك، وترد عليك قبل ما يبدي أي شي. 💜",
+    coType: "شنو تريد؟", coTypePh: "لوحة / مجسم / ميدالية / مطبوعة / شي ثاني…",
+    coDetails: "التفاصيل كاملة (إلزامي!)",
+    coDetailsPh: "مثال: لوحة كانفاس لهورنت من Silksong، حجم A4 ويّا إطار، خلفية بنفسجية، أريدها هدية ومغلفة حلو…",
+    coDetailsHint: "الشخصية/اللعبة، الحجم، الألوان، الخامات، الموعد — كل ما زادت التفاصيل، صار السعر والنتيجة أدق!",
+    coImage: "صورة مرجعية (اختياري)",
+    coNeedDetails: "رجاءً اكتب التفاصيل كاملة (شوية أكثر من هيج!) حتى آية تكَدر تسعّرها 💜",
+    coSent: "طلبك طار لآية! راح تقرأه وترد عليك بالسعر 🎨💜",
+    coStoreBanner: "ما لكيت اللي تدور عليه؟", coStoreBannerBtn: "سوّي طلب خاص 🎨",
+    coPriceTbd: "يتحدد بعد المراجعة",
     heroTitle1: "أشياء مصنوعة بحب،", heroTitle2: "من ميز آية… لبيتك",
     heroSub: "لوحات مرسومة يدويًا، صناديق ودفاتر ومطبوعات — مستوحاة من الألعاب والأنمي اللي نحبها. كل قطعة مرسومة ومصبوغة وملزوقة بإيد كيمر مدمن كافيين.",
     shopNow: "تصفّح الغنائم", readBlog: "اقرأ المدونة",
@@ -331,6 +355,7 @@ function renderChrome() {
         ${navLink("index.html", "navHome")}
         ${navLink("store.html", "navStore")}
         ${navLink("blog.html", "navBlog")}
+        ${navLink("custom.html", "navCustom")}
         ${navLink("account.html", "navAccount")}
         ${isAdmin() ? navLink("admin.html", "navAdmin") : ""}
       </div>

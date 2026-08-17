@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Orders — AyaYa Store</title>
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Marhey:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site" id="site-header"></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container" style="position:relative">
+        <h1><span class="grad" id="co-title"></span> 🎨</h1>
+        <p id="co-sub"></p>
+        <img class="corner-oc" data-img="mascot" src="assets/img/oc-pointing-up.png" alt="">
+      </div>
+    </section>
+
+    <section class="block" style="padding-top:10px">
+      <div class="container" style="display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:start" id="co-grid">
+
+        <div class="form-card">
+          <div class="field"><label>🧩 <span id="l-type"></span></label>
+            <input id="co-type" maxlength="80"></div>
+          <div class="field"><label>📝 <span id="l-details"></span></label>
+            <textarea id="co-details" rows="7" maxlength="1500"></textarea>
+            <small id="l-details-hint" style="color:var(--muted)"></small></div>
+          <div class="field"><label>📎 <span id="l-image"></span></label>
+            <input id="co-image" type="file" accept="image/*">
+            <img id="co-image-preview" style="display:none;width:110px;border-radius:12px;margin-top:8px" alt=""></div>
+          <div class="field"><label>👤 <span id="l-name"></span></label>
+            <input id="co-name" maxlength="60"></div>
+          <div class="field"><label>📱 <span id="l-phone"></span></label>
+            <input id="co-phone" maxlength="60" placeholder="07xx xxx xxxx / @username"></div>
+          <button class="btn btn-primary" id="co-send" style="width:100%;font-size:1.05rem"></button>
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap" id="co-fallbacks"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div class="form-card" style="text-align:center">
+            <img data-img="orderArt" src="assets/img/oc-giving.png" style="width:130px;margin:0 auto 10px" alt="">
+            <p id="co-price-note" style="color:var(--purple-soft);font-weight:700;font-size:1.05rem"></p>
+          </div>
+          <div class="form-card">
+            <h3 style="margin-bottom:14px">✨ <span id="co-how"></span></h3>
+            <ol id="co-steps" style="display:flex;flex-direction:column;gap:12px;padding-inline-start:22px;color:var(--muted);font-weight:600"></ol>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site" id="site-footer"></footer>
+
+  <style>
+    @media (max-width: 860px) { #co-grid { grid-template-columns: 1fr !important; } }
+  </style>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    let refImageFile = null;
+
+    function buildCustomText(f) {
+      const user = currentUser();
+      const when = new Intl.DateTimeFormat("ar-IQ", { timeZone: "Asia/Baghdad", dateStyle: "full", timeStyle: "short" }).format(new Date());
+      const sep = "━━━━━━━━━━━━━━";
+      return [
+        "🎨 طلب خاص جديد — متجر AyaYa",
+        sep,
+        `🧩 نوع الطلب: ${f.type || "—"}`,
+        "📝 التفاصيل:",
+        f.details,
+        sep,
+        `💰 السعر: ${t("coPriceTbd")}`,
+        `👤 الاسم: ${f.name}`,
+        `📱 التواصل: ${f.phone}`,
+        `📧 حساب الموقع: ${user ? `${user.name} (${user.email})` : "زائر بدون حساب"}`,
+        `🕐 وقت الطلب: ${when} (بغداد)`,
+        f.hasImage ? "📎 صورة مرجعية: جاية برسالة ثانية" : null
+      ].filter(x => x !== null).join("\n");
+    }
+
+    function renderCustom() {
+      document.getElementById("co-title").textContent = t("coTitle");
+      document.getElementById("co-sub").textContent = t("coSub");
+      document.getElementById("l-type").textContent = t("coType");
+      document.getElementById("co-type").placeholder = t("coTypePh");
+      document.getElementById("l-details").textContent = t("coDetails");
+      document.getElementById("co-details").placeholder = t("coDetailsPh");
+      document.getElementById("l-details-hint").textContent = t("coDetailsHint");
+      document.getElementById("l-image").textContent = t("coImage");
+      document.getElementById("l-name").textContent = t("fBuyerName");
+      document.getElementById("l-phone").textContent = t("fBuyerPhone");
+      document.getElementById("co-price-note").textContent = t("coPriceNote");
+      document.getElementById("co-how").textContent = t("coHow");
+      document.getElementById("co-steps").innerHTML =
+        [t("coStep1"), t("coStep2"), t("coStep3")].map(s => `<li>${esc(s)}</li>`).join("");
+      const s = getSettings();
+      document.getElementById("co-send").textContent = (s.tgToken && s.tgChatId) ? t("tgSend") : t("copyOrder");
+      document.getElementById("co-fallbacks").innerHTML = `
+        ${s.tgUsername ? `<a class="btn btn-ghost btn-sm" href="https://t.me/${esc(s.tgUsername)}" target="_blank" rel="noopener">${t("tgDm")}</a>` : ""}
+        <a class="btn btn-ghost btn-sm" href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>`;
+      const user = currentUser();
+      if (user && !document.getElementById("co-name").value) document.getElementById("co-name").value = user.name;
+      applyImages();
+    }
+
+    document.getElementById("co-image").addEventListener("change", e => {
+      refImageFile = e.target.files[0] || null;
+      const prev = document.getElementById("co-image-preview");
+      if (refImageFile) {
+        const r = new FileReader();
+        r.onload = () => { prev.src = r.result; prev.style.display = "block"; };
+        r.readAsDataURL(refImageFile);
+      } else prev.style.display = "none";
+    });
+
+    document.getElementById("co-send").addEventListener("click", async () => {
+      const f = {
+        type: document.getElementById("co-type").value.trim(),
+        details: document.getElementById("co-details").value.trim(),
+        name: document.getElementById("co-name").value.trim(),
+        phone: document.getElementById("co-phone").value.trim(),
+        hasImage: !!refImageFile
+      };
+      if (f.details.length < 20) {
+        toast(t("coNeedDetails"));
+        mascotSay(t("coNeedDetails"), "mascotThinking");
+        document.getElementById("co-details").focus();
+        return;
+      }
+      if (!f.name || !f.phone) {
+        toast(t("errNeedContact"));
+        (f.name ? document.getElementById("co-phone") : document.getElementById("co-name")).focus();
+        return;
+      }
+      const text = buildCustomText(f);
+      const s = getSettings();
+      const btn = document.getElementById("co-send");
+      if (s.tgToken && s.tgChatId) {
+        btn.disabled = true;
+        btn.textContent = t("tgSending");
+        try {
+          const res = await fetch(`https://api.telegram.org/bot${encodeURIComponent(s.tgToken)}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: s.tgChatId, text })
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.description || "telegram error");
+          if (refImageFile) {
+            const fd = new FormData();
+            fd.append("chat_id", s.tgChatId);
+            fd.append("photo", refImageFile);
+            fd.append("caption", `📎 صورة مرجعية لطلب ${f.name}`);
+            await fetch(`https://api.telegram.org/bot${encodeURIComponent(s.tgToken)}/sendPhoto`, { method: "POST", body: fd }).catch(() => {});
+          }
+          btn.textContent = "✓ " + t("coSent");
+          mascotSay(t("coSent"), "mascotHappy");
+          confettiBurst();
+        } catch (e) {
+          btn.disabled = false;
+          btn.textContent = t("tgSend");
+          toast(t("tgFail"));
+        }
+      } else {
+        try { await navigator.clipboard.writeText(text); } catch {}
+        btn.textContent = t("copied");
+      }
+    });
+
+    window.onLangChange = renderCustom;
+    document.addEventListener("DOMContentLoaded", renderCustom);
+  </script>
+</body>
+</html>

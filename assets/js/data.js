@@ -115,24 +115,6 @@ const DEFAULT_PRODUCTS = [
       name: "باكيت ستيكرات AyaYa",
       desc: "مجموعة ستيكرات AyaYa لامعة — لايك، تفكير، وضع العصبية وأكثر. الصقها على اللابتوب أو الكونسول أو القطة (لا ترا ممنوع)."
     }
-  },
-  {
-    id: "custom-commission",
-    img: "assets/img/oc-pointing-up.png",
-    images: ["assets/img/oc-pointing-up.png"],
-    price: 90000,
-    category: "commissions",
-    featured: false,
-    inStock: true,
-    youtube: "",
-    en: {
-      name: "Custom Order — Anything You Imagine",
-      desc: "A painting, a figure, a keychain, a print, a box… whatever you have in mind, from any game or anime. Tell me your idea and we'll make it real, just for you!"
-    },
-    ar: {
-      name: "طلب خاص — أي شي يخطر ببالك",
-      desc: "لوحة، مجسم، ميدالية، مطبوعة، صندوق… أي شي بخيالك من أي لعبة أو أنمي. كَلي فكرتك وخلّينا نسويها بس إلك!"
-    }
   }
 ];
 

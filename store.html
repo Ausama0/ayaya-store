@@ -31,6 +31,11 @@
           <img data-img="cartEmpty" src="assets/img/oc-thinking.png" alt="">
           <p><b data-i18n="noResults"></b></p>
         </div>
+
+        <div class="about-strip reveal shown" style="margin-top:44px;text-align:center;display:block">
+          <h2 style="margin-bottom:8px">🤔 <span id="co-banner-text"></span></h2>
+          <a class="btn btn-gold" href="custom.html" id="co-banner-btn" style="margin-top:10px"></a>
+        </div>
       </div>
     </section>
   </main>
@@ -40,7 +45,7 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/js/main.js"></script>
   <script>
-    const CATS = ["all", "paintings", "crafts", "prints", "commissions"];
+    const CATS = ["all", "paintings", "crafts", "prints"];
     let activeCat = "all";
     let query = "";
 
@@ -59,7 +64,7 @@
             <span class="price">${money(p.price)}</span>
             ${p.inStock
               ? `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">${t("addToCart")}</button>`
-              : `<a class="btn btn-gold btn-sm" href="product.html?id=custom-commission">${t("orderCustom")}</a>`}
+              : `<a class="btn btn-gold btn-sm" href="custom.html">${t("orderCustom")}</a>`}
           </div>
         </div>
       </article>`;
@@ -71,7 +76,7 @@
 
       document.getElementById("cat-pills").innerHTML = CATS.map(c =>
         `<button class="pill${c === activeCat ? " active" : ""}" data-cat="${c}">${c === "all" ? t("allCat") : t(c)}</button>`
-      ).join("");
+      ).join("") + `<a class="pill" href="custom.html" style="color:var(--gold)">🎨 ${t("commissions")}</a>`;
       document.querySelectorAll("[data-cat]").forEach(b => b.addEventListener("click", () => {
         activeCat = b.dataset.cat; renderStore();
       }));
@@ -83,6 +88,8 @@
         return inCat && (!q || text.includes(q));
       });
 
+      document.getElementById("co-banner-text").textContent = t("coStoreBanner");
+      document.getElementById("co-banner-btn").textContent = t("coStoreBannerBtn");
       document.getElementById("product-grid").innerHTML = items.map(productCard).join("");
       const none = document.getElementById("no-results");
       none.style.display = items.length ? "none" : "block";
