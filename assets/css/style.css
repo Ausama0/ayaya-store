@@ -38,6 +38,14 @@ body {
 
 html[lang="ar"] body { font-family: var(--font-ar); }
 
+/* ZYAEA Celestial — big-title display font (Arabic only; Latin falls back to Marhey) */
+@font-face {
+  font-family: "ZyaeaCelestial";
+  src: url("../fonts/ZYAEA-Celestial.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
 /* hand-drawn display font for headings (Arabic + Latin) */
 h1, h2, h3,
 .brand span,
@@ -45,6 +53,16 @@ h1, h2, h3,
 .section-head h2 {
   font-family: "Marhey", "Baloo Bhaijaan 2", "Baloo 2", cursive;
   letter-spacing: .2px;
+}
+
+/* big titles use ZYAEA Celestial */
+h1, h2,
+.page-hero h1,
+.hero h1,
+.section-head h2,
+.zone-head h2 {
+  font-family: "ZyaeaCelestial", "Marhey", "Baloo Bhaijaan 2", "Baloo 2", cursive;
+  font-weight: 400;
 }
 
 /* retro pixel accents (Latin/digits only — Arabic falls back) */
