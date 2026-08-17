@@ -103,7 +103,7 @@ const DEFAULT_PRODUCTS = [
     img: "assets/img/oc-giving.png",
     images: ["assets/img/oc-giving.png", "assets/img/oc-thinking.png", "assets/img/oc-grumpy.png", "assets/img/oc-gaming.png"],
     price: 10000,
-    category: "stickers",
+    category: "prints",
     featured: false,
     inStock: true,
     youtube: "",
@@ -126,12 +126,12 @@ const DEFAULT_PRODUCTS = [
     inStock: true,
     youtube: "",
     en: {
-      name: "Custom Painting Commission",
-      desc: "Your favorite game or anime character, hand-painted on canvas just for you. Tell me what you want and let's make it real!"
+      name: "Custom Order — Anything You Imagine",
+      desc: "A painting, a figure, a keychain, a print, a box… whatever you have in mind, from any game or anime. Tell me your idea and we'll make it real, just for you!"
     },
     ar: {
-      name: "طلب لوحة مخصصة",
-      desc: "شخصيتك المفضلة من الألعاب أو الأنمي، مرسومة يدويًا على كانفاس خصيصًا لك. كَلي شتريد وخلّينا نسويها!"
+      name: "طلب خاص — أي شي يخطر ببالك",
+      desc: "لوحة، مجسم، ميدالية، مطبوعة، صندوق… أي شي بخيالك من أي لعبة أو أنمي. كَلي فكرتك وخلّينا نسويها بس إلك!"
     }
   }
 ];

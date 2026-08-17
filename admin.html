@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin ✦ AyaYa Store</title>
+  <title>Admin — AyaYa Store</title>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Marhey:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -150,7 +150,7 @@
         <div class="field"><label>${t("fDescAr")}</label><textarea id="f-desc-ar" dir="rtl" rows="3">${esc(p.ar.desc)}</textarea></div>
         <div class="field"><label>${t("fPrice")}</label><input id="f-price" type="number" min="0" step="1" value="${p.price}"></div>
         <div class="field"><label>${t("fCat")}</label>
-          <select id="f-cat">${["paintings", "crafts", "stickers", "commissions"].map(c => `<option value="${c}"${p.category === c ? " selected" : ""}>${t(c)}</option>`).join("")}</select></div>
+          <select id="f-cat">${["paintings", "crafts", "prints", "commissions"].map(c => `<option value="${c}"${p.category === c ? " selected" : ""}>${t(c)}</option>`).join("")}</select></div>
         ${galleryEditor()}
         <div class="field"><label>${t("fYoutubeProd")}</label><input id="f-youtube" value="${esc(p.youtube || "")}" placeholder="https://youtube.com/watch?v=…"></div>
         <div class="field"><label><input type="checkbox" id="f-featured"${p.featured ? " checked" : ""}> ${t("fFeatured")}</label></div>
@@ -322,7 +322,7 @@
           </div>`).join("")}
         </div>
         <div style="position:sticky;bottom:14px;margin-top:18px;text-align:center">
-          <button class="btn btn-primary" id="save-texts" style="box-shadow:var(--shadow)">${t("save")} ✦</button>
+          <button class="btn btn-primary" id="save-texts" style="box-shadow:var(--shadow)">${t("save")}</button>
         </div>`;
 
       const search = document.getElementById("text-search");

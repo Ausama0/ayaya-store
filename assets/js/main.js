@@ -17,9 +17,9 @@ const I = {
   en: {
     brandTag: "handmade with love & mana",
     navHome: "Home", navStore: "Store", navBlog: "Blog", navAbout: "About", navAccount: "Account", navAdmin: "Admin",
-    heroTitle1: "Handcrafted loot,", heroTitle2: "straight from the gloom",
-    heroSub: "Hand-painted canvases, hand-made boxes, journals and stickers — inspired by the games and anime we love. Every piece is drawn, painted and glued together by one very caffeinated gamer.",
-    shopNow: "Browse the loot ✦", readBlog: "Read the blog",
+    heroTitle1: "Made by hand, with love —", heroTitle2: "from Aya's desk to your home",
+    heroSub: "Hand-painted canvases, hand-made boxes, journals and prints — inspired by the games and anime we love. Every piece is drawn, painted and glued together by one very caffeinated gamer.",
+    shopNow: "Browse the loot", readBlog: "Read the blog",
     featured: "Featured drops", featuredSub: "Fresh from the drawing desk",
     viewAll: "View everything",
     latestPosts: "Latest from the blog", latestSub: "Devlogs, doodles & unboxings",
@@ -27,12 +27,16 @@ const I = {
     aboutBody: "I'm a YouTuber who plays through games, draws way too much, and turns favorite bosses into paintings, journals and little handmade treasures. Everything in this store is made by hand — markers, ink, acrylics, glue, and a suspicious amount of purple.",
     aboutCta: "Watch on YouTube",
     marquee: ["hand-painted", "one-of-a-kind", "gamer-made", "ships with love", "no microtransactions", "drops are limited"],
-    addToCart: "Add to cart", soldOut: "Sold out", inCart: "In cart ✓",
+    addToCart: "Add to cart", soldOut: "Not available right now 😢", inCart: "In cart ✓",
+    orderCustom: "Want it? Order a custom one 🎨",
     cart: "Cart", cartEmpty: "Your cart is emptier than Hallownest…", cartEmptySub: "Go grab some loot!",
     total: "Total", checkout: "Send order 📨",
     orderTitle: "Almost there!", orderHint: "This store takes orders by DM — copy your order below and send it on Instagram or YouTube, and Aya will reply with payment & shipping details.",
     copyOrder: "Copy order", copied: "Copied! Now send it 💌",
-    searchPh: "Search the loot…", allCat: "All", paintings: "Paintings", crafts: "Crafts", stickers: "Stickers", commissions: "Commissions", drawings: "Drawings", gaming: "Gaming",
+    searchPh: "Search the loot…", allCat: "All", paintings: "Paintings", crafts: "Crafts", prints: "Prints", commissions: "Custom orders", drawings: "Drawings", gaming: "Gaming",
+    ytZone: "The YouTube corner", ytZoneSub: "Game stories, told Aya's way — watch them right here",
+    igZone: "New on Instagram", igZoneSub: "Fresh from the desk: reels & posts",
+    txtZone: "Notes & scribbles", newVideo: "فيديو جديد", latestLabel: "LATEST",
     noResults: "Hmm… nothing here. Try another word?",
     blogTitle: "The Blog", blogSub: "Everything I'm playing, drawing and gluing — sometimes all three at once.",
     storeTitle: "The Store", storeSub: "Every item is handmade. When it's gone, it's gone — like a rare drop.",
@@ -58,7 +62,7 @@ const I = {
     watchVideo: "▶ Watch video", openLink: "🔗 Open link",
     sYoutube: "YouTube URL", sInstagram: "Instagram URL", sTiktok: "TikTok URL", sDiscord: "Discord invite (optional)",
     settingsSaved: "Settings saved ✓",
-    mascotHi: "Hi! I'm Aya ✦ click me!",
+    mascotHi: "Hi! I'm Aya click me!",
     mascotFacts: [
       "Everything here is 100% handmade!",
       "Purple is scientifically the best color.",
@@ -67,14 +71,14 @@ const I = {
       "Try the Konami code… just saying 👀",
       "Silksong is real and I have proof (the box)."
     ],
-    mascotCart: "Ooh, nice pick! ✦",
+    mascotCart: "Ooh, nice pick!",
     mascotSearchEmpty: "Hmm, can't find that…",
     mascotKonami: "⬆⬆⬇⬇⬅➡⬅➡🅱🅰 YOU FOUND IT!",
     footNote: "Made with 💜, markers and way too much coffee.",
     rights: "AyaYa Store — all loot handcrafted.",
-    newBadge: "NEW ✦", featBadge: "★ Featured",
+    newBadge: "NEW", featBadge: "★ Featured",
     by: "by Aya", readMore: "Read more ↗", close: "Close",
-    accWho: "Logged in as", accAdmin: "You're the admin! ✦", goAdmin: "Open admin panel",
+    accWho: "Logged in as", accAdmin: "You're the admin!", goAdmin: "Open admin panel",
     tabTexts: "Texts", tabImages: "Images",
     textsHint: "Change any wording on the site — English and Arabic side by side. Empty = use the default.",
     searchTexts: "Search texts…",
@@ -96,10 +100,10 @@ const I = {
     sTgUsername: "Telegram username (without @) — for the DM button",
     tgHint: "With token + chat id, orders are sent straight to your Telegram. Note: on a public site the token is visible to visitors — use a bot made just for orders, and revoke it in @BotFather if it's ever abused.",
     productNotFound: "This item vanished into the gloom… 🌫️", backToStore: "← Back to the store",
-    relatedTitle: "More loot you might like ✦",
+    relatedTitle: "More loot you might like",
     fMoreImages: "Photos (first = cover, you can add several)", addImage: "+ Add photo",
     fYoutubeProd: "YouTube video (optional — plays on the product page)",
-    watchOnIg: "📸 Open on Instagram", qtyLabel: "Quantity", buyNow: "Add to cart ✦",
+    watchOnIg: "📸 Open on Instagram", qtyLabel: "Quantity", buyNow: "Add to cart",
     fBuyerName: "Your name", fBuyerPhone: "Phone or Telegram username",
     fBuyerNotes: "Notes — address, colors, details… (optional)",
     errNeedContact: "Please write your name and a way to contact you 💜",
@@ -108,9 +112,9 @@ const I = {
   ar: {
     brandTag: "مصنوع يدويًا بحب ومانا",
     navHome: "الرئيسية", navStore: "المتجر", navBlog: "المدونة", navAbout: "من أنا", navAccount: "حسابي", navAdmin: "الإدارة",
-    heroTitle1: "غنائم مصنوعة يدويًا،", heroTitle2: "مباشرة من الظلال",
-    heroSub: "لوحات مرسومة يدويًا، صناديق ودفاتر وستيكرات — مستوحاة من الألعاب والأنمي اللي نحبها. كل قطعة مرسومة ومصبوغة وملزوقة بإيد كيمر مدمن كافيين.",
-    shopNow: "تصفّح الغنائم ✦", readBlog: "اقرأ المدونة",
+    heroTitle1: "أشياء مصنوعة بحب،", heroTitle2: "من ميز آية… لبيتك",
+    heroSub: "لوحات مرسومة يدويًا، صناديق ودفاتر ومطبوعات — مستوحاة من الألعاب والأنمي اللي نحبها. كل قطعة مرسومة ومصبوغة وملزوقة بإيد كيمر مدمن كافيين.",
+    shopNow: "تصفّح الغنائم", readBlog: "اقرأ المدونة",
     featured: "أحدث الإصدارات", featuredSub: "طازة من ميز الرسم",
     viewAll: "شاهد الكل",
     latestPosts: "آخر منشورات المدونة", latestSub: "يوميات، رسمات وفتح صناديق",
@@ -118,12 +122,16 @@ const I = {
     aboutBody: "يوتيوبرية ألعب الألعاب وأرسم هواي، وأحوّل البوسات المفضلة إلى لوحات ودفاتر وكنوز صغيرة مصنوعة يدويًا. كل شي بالمتجر مصنوع بإيدي — ماركرات وحبر وأكريليك وصمغ وكمية مشبوهة من البنفسجي.",
     aboutCta: "تابعني على يوتيوب",
     marquee: ["مرسوم يدويًا", "قطعة وحدة بس", "من كيمر لكيمر", "يوصل بحب", "بدون مشتريات داخلية", "الكمية محدودة"],
-    addToCart: "أضف للسلة", soldOut: "نفذت", inCart: "بالسلة ✓",
+    addToCart: "أضف للسلة", soldOut: "غير متوفرة حاليًا 😢", inCart: "بالسلة ✓",
+    orderCustom: "تريدها؟ اطلبها كطلب خاص 🎨",
     cart: "السلة", cartEmpty: "سلتك أفرغ من هولونست…", cartEmptySub: "روح اجمع شوية غنائم!",
     total: "المجموع", checkout: "أرسل الطلب 📨",
     orderTitle: "وصلت للنهاية!", orderHint: "المتجر يستقبل الطلبات عبر الرسائل — انسخ طلبك وأرسله على انستغرام أو يوتيوب، وآية راح ترد عليك بتفاصيل الدفع والتوصيل.",
     copyOrder: "انسخ الطلب", copied: "انتسخ! هسه أرسله 💌",
-    searchPh: "دوّر على الغنائم…", allCat: "الكل", paintings: "لوحات", crafts: "أشغال يدوية", stickers: "ستيكرات", commissions: "طلبات خاصة", drawings: "رسمات", gaming: "كيمنغ",
+    searchPh: "دوّر على الغنائم…", allCat: "الكل", paintings: "لوحات", crafts: "أشغال يدوية", prints: "مطبوعات", commissions: "طلبات خاصة", drawings: "رسمات", gaming: "كيمنغ",
+    ytZone: "ركن اليوتيوب", ytZoneSub: "قصص الألعاب بطريقة آية — شاهدوها هنا مباشرة",
+    igZone: "جديد الانستا", igZoneSub: "طازة من ميز الرسم: ريلات وبوستات",
+    txtZone: "تدوينات وخربشات", newVideo: "فيديو جديد", latestLabel: "الأحدث",
     noResults: "همم… ماكو شي هنا. جرّب كلمة ثانية؟",
     blogTitle: "المدونة", blogSub: "كل شي ألعبه وأرسمه وألزقه — أحيانًا الثلاثة سوية.",
     storeTitle: "المتجر", storeSub: "كل قطعة مصنوعة يدويًا. إذا خلصت، خلصت — مثل الدروب النادر.",
@@ -149,7 +157,7 @@ const I = {
     watchVideo: "▶ شاهد الفيديو", openLink: "🔗 افتح الرابط",
     sYoutube: "رابط يوتيوب", sInstagram: "رابط انستغرام", sTiktok: "رابط تيك توك", sDiscord: "دعوة ديسكورد (اختياري)",
     settingsSaved: "تم حفظ الإعدادات ✓",
-    mascotHi: "هلا! آني آية ✦ اضغط عليّ!",
+    mascotHi: "هلا! آني آية اضغط عليّ!",
     mascotFacts: [
       "كل شي هنا مصنوع يدويًا ١٠٠٪!",
       "البنفسجي علميًا أفضل لون.",
@@ -158,14 +166,14 @@ const I = {
       "جرّب كود كونامي… بس أكَلك 👀",
       "سيلكسونغ حقيقي وعندي دليل (الصندوق)."
     ],
-    mascotCart: "اووه، اختيار حلو! ✦",
+    mascotCart: "اووه، اختيار حلو!",
     mascotSearchEmpty: "همم، ما لكيتها…",
     mascotKonami: "⬆⬆⬇⬇⬅➡⬅➡🅱🅰 لكيتها!",
     footNote: "مصنوع بـ💜 وماركرات وكمية مو طبيعية من الكهوة.",
     rights: "متجر AyaYa — كل الغنائم مصنوعة يدويًا.",
-    newBadge: "جديد ✦", featBadge: "★ مميز",
+    newBadge: "جديد", featBadge: "★ مميز",
     by: "بقلم آية", readMore: "اقرأ المزيد ↗", close: "إغلاق",
-    accWho: "مسجل دخول باسم", accAdmin: "إنت الأدمن! ✦", goAdmin: "افتح لوحة الإدارة",
+    accWho: "مسجل دخول باسم", accAdmin: "إنت الأدمن!", goAdmin: "افتح لوحة الإدارة",
     tabTexts: "النصوص", tabImages: "الصور",
     textsHint: "غيّر أي عبارة بالموقع — الانكليزي والعربي يم بعض. الفراغ = استخدام النص الأصلي.",
     searchTexts: "دوّر بالنصوص…",
@@ -187,10 +195,10 @@ const I = {
     sTgUsername: "يوزر تيليغرام (بدون @) — لزر المراسلة",
     tgHint: "بوجود التوكن والمعرف، الطلبات توصل مباشرة لتيليغرامك. ملاحظة: بموقع عام التوكن يظهر للزوار — استخدم بوت مخصص للطلبات بس، وسوّي له revoke من @BotFather إذا صار سوء استخدام.",
     productNotFound: "هذي القطعة اختفت بالظلال… 🌫️", backToStore: "→ رجوع للمتجر",
-    relatedTitle: "غنائم ثانية تعجبك ✦",
+    relatedTitle: "غنائم ثانية تعجبك",
     fMoreImages: "الصور (الأولى = الغلاف، تكَدر تضيف أكثر من وحدة)", addImage: "+ أضف صورة",
     fYoutubeProd: "فيديو يوتيوب (اختياري — يشتغل بصفحة المنتج)",
-    watchOnIg: "📸 افتح بانستغرام", qtyLabel: "الكمية", buyNow: "أضف للسلة ✦",
+    watchOnIg: "📸 افتح بانستغرام", qtyLabel: "الكمية", buyNow: "أضف للسلة",
     fBuyerName: "اسمك", fBuyerPhone: "رقم الهاتف أو يوزر التيليغرام",
     fBuyerNotes: "ملاحظات — العنوان، الألوان، التفاصيل… (اختياري)",
     errNeedContact: "رجاءً اكتب اسمك وطريقة للتواصل وياك 💜",
@@ -316,7 +324,7 @@ function renderChrome() {
     <nav class="nav container">
       <a class="brand" href="index.html">
         <img src="${esc(img("logo"))}" alt="AyaYa">
-        <span>Aya<span class="ya">Ya</span> ✦</span>
+        <span>Aya<span class="ya">Ya</span></span>
       </a>
       <button class="burger" id="burger" aria-label="menu">☰</button>
       <div class="nav-links" id="nav-links">
@@ -449,7 +457,7 @@ function buildOrderText(buyer) {
   const when = new Intl.DateTimeFormat("ar-IQ", { timeZone: "Asia/Baghdad", dateStyle: "full", timeStyle: "short" }).format(new Date());
   const sep = "━━━━━━━━━━━━━━";
   return [
-    "🛒 طلب جديد — متجر AyaYa ✦",
+    "🛒 طلب جديد — متجر AyaYa",
     sep,
     `📦 المنتجات (${count} ${count === 1 ? "قطعة" : "قطع"}):`,
     "",
@@ -620,7 +628,7 @@ function mascotSay(msg, pose) {
 })();
 
 function controllerRain() {
-  const emojis = ["🎮", "✦", "💜", "🕹", "⭐", "👾"];
+  const emojis = ["🎮", "💜", "🕹", "⭐", "👾", "🎨"];
   for (let n = 0; n < 36; n++) {
     setTimeout(() => {
       const el = document.createElement("div");

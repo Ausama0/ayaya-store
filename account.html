@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Account ✦ AyaYa Store</title>
+  <title>Account — AyaYa Store</title>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Marhey:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -30,7 +30,7 @@
       return `<div class="hero-art">
         <div class="halo"></div>
         <img class="mascot-main" src="${esc(img("accountArt"))}" alt="Aya reaching out">
-        <span class="floaty" style="top:6%;left:10%">✦</span>
+        <span class="floaty" style="top:6%;left:10%"></span>
         <span class="floaty" style="bottom:10%;right:8%;animation-delay:1.8s">💜</span>
       </div>`;
     }
@@ -54,7 +54,7 @@
       const isLogin = mode === "login";
       wrap.innerHTML = `${artSide()}
         <div class="form-card">
-          <h2>${isLogin ? t("login") : t("signup")} ✦</h2>
+          <h2>${isLogin ? t("login") : t("signup")}</h2>
           <p class="hint">${t("accSub")}</p>
           <form id="auth-form">
             ${isLogin ? "" : `<div class="field"><label>${t("name")}</label><input id="f-name" type="text" maxlength="40"></div>`}

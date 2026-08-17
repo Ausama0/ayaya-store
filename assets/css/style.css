@@ -38,6 +38,22 @@ body {
 
 html[lang="ar"] body { font-family: var(--font-ar); }
 
+/* hand-drawn display font for headings (Arabic + Latin) */
+h1, h2, h3,
+.brand span,
+.page-hero h1,
+.section-head h2 {
+  font-family: "Marhey", "Baloo Bhaijaan 2", "Baloo 2", cursive;
+  letter-spacing: .2px;
+}
+
+/* retro pixel accents (Latin/digits only — Arabic falls back) */
+.pixel-font {
+  font-family: "Press Start 2P", monospace;
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
 ::selection { background: var(--purple); color: #fff; }
 
 img { max-width: 100%; display: block; }
@@ -335,6 +351,55 @@ section.block { padding: 68px 0; }
 
 .yt-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
 
+/* ---------- Blog zones ---------- */
+.zone { padding: 34px 0 10px; }
+
+.zone-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+
+.zone-head h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); }
+
+.zone-head p { color: var(--muted); width: 100%; margin-top: 2px; }
+
+/* YouTube corner = retro game vibes */
+.yt-zone {
+  border: 3px solid var(--purple);
+  border-radius: 18px;
+  padding: 26px clamp(14px, 3vw, 30px) 30px;
+  background:
+    linear-gradient(rgba(157, 92, 255, .05), transparent 40%),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(157, 92, 255, .045) 3px 4px),
+    var(--bg-2);
+  box-shadow: 6px 6px 0 rgba(123, 63, 242, .35);
+  position: relative;
+}
+
+.yt-zone .pixel-tag {
+  font-family: "Press Start 2P", monospace;
+  font-size: .6rem; color: var(--gold);
+}
+
+.new-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--magenta); color: #fff;
+  font-family: "Press Start 2P", "Baloo Bhaijaan 2", monospace;
+  font-size: .6rem; font-weight: 400;
+  padding: 8px 12px; border-radius: 4px;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, .45);
+  animation: blink 1.1s steps(2, start) infinite;
+  text-transform: uppercase;
+}
+
+@keyframes blink { 50% { opacity: .35; } }
+
+.yt-latest {
+  background: var(--panel); border: 2px solid var(--line);
+  border-radius: 14px; padding: 18px; margin: 16px 0 22px;
+}
+
+.yt-latest h3 { font-size: 1.3rem; margin: 10px 0 6px; }
+
+.yt-latest .yt-embed { max-width: 760px; }
+
 .ig-embed {
   border-radius: 14px; overflow: hidden; border: 1px solid var(--line);
   margin-top: 10px; background: #fff; max-width: 400px; align-self: center; width: 100%;
@@ -555,7 +620,7 @@ html[dir="rtl"] .drawer { --dir: -1; }
 }
 
 .about-strip::after {
-  content: "✦"; position: absolute; top: -30px; inset-inline-end: 10px;
+  content: ""; position: absolute; top: -30px; inset-inline-end: 10px;
   font-size: 9rem; color: rgba(157, 92, 255, .12); pointer-events: none;
 }
 

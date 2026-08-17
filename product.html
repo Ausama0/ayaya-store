@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product ✦ AyaYa Store</title>
+  <title>Product — AyaYa Store</title>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Marhey:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -59,7 +59,7 @@
         return;
       }
 
-      document.title = loc(p, "name") + " ✦ AyaYa Store";
+      document.title = loc(p, "name") + " — AyaYa Store";
       const imgs = gallery(p);
       if (mainIdx >= imgs.length) mainIdx = 0;
       const vid = ytId(p.youtube);
@@ -87,7 +87,10 @@
                   <button id="qty-dec">−</button><b id="qty-val">${qty}</b><button id="qty-inc">+</button>
                 </div>
                 <button class="btn btn-primary" id="add-btn" style="font-size:1.1rem;padding:14px 30px">🛒 ${t("buyNow")}</button>
-              </div>` : `<button class="btn btn-danger" disabled>${t("soldOut")}</button>`}
+              </div>` : `<div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+                <span class="btn btn-danger" style="cursor:default">${t("soldOut")}</span>
+                <a class="btn btn-gold" href="product.html?id=custom-commission">${t("orderCustom")}</a>
+              </div>`}
             ${vid ? `<div class="yt-embed" style="margin-top:26px"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="YouTube video" allowfullscreen loading="lazy"></iframe></div>` : ""}
           </div>
         </div>`;

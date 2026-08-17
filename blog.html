@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog ✦ AyaYa Store</title>
+  <title>Blog — AyaYa Store</title>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Marhey:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -25,7 +25,36 @@
     <section class="block" style="padding-top:10px">
       <div class="container">
         <div class="pills" id="tag-pills"></div>
-        <div class="post-grid" id="post-grid" style="grid-template-columns:repeat(auto-fill,minmax(340px,1fr))"></div>
+
+        <!-- YouTube corner (retro game zone) -->
+        <div class="zone" id="yt-zone-wrap">
+          <div class="yt-zone">
+            <div class="zone-head">
+              <span class="pixel-tag pixel-font">▶ PLAY</span>
+              <h2>🎮 <span id="yt-zone-title"></span></h2>
+              <p id="yt-zone-sub"></p>
+            </div>
+            <div id="yt-latest"></div>
+            <div class="post-grid" id="yt-grid" style="grid-template-columns:repeat(auto-fill,minmax(340px,1fr))"></div>
+          </div>
+        </div>
+
+        <!-- Instagram zone -->
+        <div class="zone" id="ig-zone-wrap">
+          <div class="zone-head">
+            <h2>📸 <span id="ig-zone-title"></span></h2>
+            <p id="ig-zone-sub"></p>
+          </div>
+          <div class="post-grid" id="ig-grid" style="grid-template-columns:repeat(auto-fill,minmax(340px,1fr))"></div>
+        </div>
+
+        <!-- Plain posts -->
+        <div class="zone" id="txt-zone-wrap">
+          <div class="zone-head">
+            <h2>✏️ <span id="txt-zone-title"></span></h2>
+          </div>
+          <div class="post-grid" id="txt-grid" style="grid-template-columns:repeat(auto-fill,minmax(340px,1fr))"></div>
+        </div>
       </div>
     </section>
   </main>
@@ -47,11 +76,11 @@
       return m ? `${m[1]}/${m[2]}` : null;
     }
 
-    function postCard(p) {
+    function postCard(p, opts = {}) {
       const vid = ytId(p.youtube);
       const ig = igPath(p.instagram);
       return `<article class="post reveal shown" id="${esc(p.id)}">
-        ${p.img ? `<div class="thumb"><img src="${esc(p.img)}" alt="" loading="lazy"></div>` : ""}
+        ${p.img && !opts.noThumb ? `<div class="thumb"><img src="${esc(p.img)}" alt="" loading="lazy"></div>` : ""}
         <div class="post-body">
           <time>📅 ${p.date} · ${t("by")}</time>
           <h3>${esc(loc(p, "title"))}</h3>
@@ -66,8 +95,23 @@
       </article>`;
     }
 
+    function latestVideoCard(p) {
+      const vid = ytId(p.youtube);
+      return `<div class="yt-latest reveal shown" id="${esc(p.id)}">
+        <span class="new-badge">★ NEW! ${t("newVideo")}</span>
+        <h3>${esc(loc(p, "title"))}</h3>
+        <p style="color:var(--muted);white-space:pre-line">${esc(loc(p, "body"))}</p>
+        <div class="yt-embed"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="YouTube video" allowfullscreen loading="lazy"></iframe></div>
+      </div>`;
+    }
+
     function renderBlog() {
       document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+      document.getElementById("yt-zone-title").textContent = t("ytZone");
+      document.getElementById("yt-zone-sub").textContent = t("ytZoneSub");
+      document.getElementById("ig-zone-title").textContent = t("igZone");
+      document.getElementById("ig-zone-sub").textContent = t("igZoneSub");
+      document.getElementById("txt-zone-title").textContent = t("txtZone");
 
       const posts = [...getPosts()].sort((a, b) => b.date.localeCompare(a.date));
       const tags = ["all", ...new Set(posts.map(p => p.tag).filter(Boolean))];
@@ -79,7 +123,22 @@
       }));
 
       const shown = posts.filter(p => activeTag === "all" || p.tag === activeTag);
-      document.getElementById("post-grid").innerHTML = shown.map(postCard).join("");
+      const yt = shown.filter(p => ytId(p.youtube));
+      const igOnly = shown.filter(p => igPath(p.instagram) && !ytId(p.youtube));
+      const rest = shown.filter(p => !ytId(p.youtube) && !igPath(p.instagram));
+
+      // YouTube corner: newest video gets the big spot + NEW badge
+      const [latest, ...olderYt] = yt;
+      document.getElementById("yt-latest").innerHTML = latest ? latestVideoCard(latest) : "";
+      document.getElementById("yt-grid").innerHTML = olderYt.map(p => postCard(p)).join("");
+      document.getElementById("yt-zone-wrap").style.display = yt.length ? "" : "none";
+
+      document.getElementById("ig-grid").innerHTML = igOnly.map(p => postCard(p)).join("");
+      document.getElementById("ig-zone-wrap").style.display = igOnly.length ? "" : "none";
+
+      document.getElementById("txt-grid").innerHTML = rest.map(p => postCard(p)).join("");
+      document.getElementById("txt-zone-wrap").style.display = rest.length ? "" : "none";
+
       applyImages();
 
       // deep-link scroll

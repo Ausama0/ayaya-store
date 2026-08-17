@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Store ✦ AyaYa Store</title>
+  <title>Store — AyaYa Store</title>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Marhey:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -40,7 +40,7 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/js/main.js"></script>
   <script>
-    const CATS = ["all", "paintings", "crafts", "stickers", "commissions"];
+    const CATS = ["all", "paintings", "crafts", "prints", "commissions"];
     let activeCat = "all";
     let query = "";
 
@@ -59,7 +59,7 @@
             <span class="price">${money(p.price)}</span>
             ${p.inStock
               ? `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">${t("addToCart")}</button>`
-              : `<button class="btn btn-danger btn-sm" disabled>${t("soldOut")}</button>`}
+              : `<a class="btn btn-gold btn-sm" href="product.html?id=custom-commission">${t("orderCustom")}</a>`}
           </div>
         </div>
       </article>`;

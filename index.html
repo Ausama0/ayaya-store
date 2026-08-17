@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AyaYa Store ✦ Handcrafted gamer loot</title>
+  <title>AyaYa Store — Handcrafted gamer loot</title>
   <meta name="description" content="Hand-painted canvases, handmade boxes, journals and stickers inspired by games and anime — made by Aya.">
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Marhey:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -30,7 +30,7 @@
           <div class="halo"></div>
           <img class="mascot-main" data-img="hero" src="assets/img/logo.png" alt="Aya mascot giving a thumbs up">
           <span class="floaty" style="top:8%;left:6%;animation-delay:.5s">🎮</span>
-          <span class="floaty" style="top:16%;right:4%;animation-delay:1.4s">✦</span>
+          <span class="floaty" style="top:16%;right:4%;animation-delay:1.4s">🎨</span>
           <span class="floaty" style="bottom:12%;left:12%;animation-delay:2.2s">💜</span>
           <span class="floaty" style="bottom:4%;right:14%;animation-delay:3s">🖌️</span>
         </div>
@@ -103,7 +103,7 @@
             <span class="price">${money(p.price)}</span>
             ${p.inStock
               ? `<button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">${t("addToCart")}</button>`
-              : `<button class="btn btn-danger btn-sm" disabled>${t("soldOut")}</button>`}
+              : `<a class="btn btn-gold btn-sm" href="product.html?id=custom-commission">${t("orderCustom")}</a>`}
           </div>
         </div>
       </article>`;
@@ -115,7 +115,7 @@
 
       // marquee (doubled for seamless loop)
       const words = t("marquee");
-      const seq = words.map(w => `<span>✦ ${w}</span>`).join("");
+      const seq = words.map(w => `<span>${w}</span>`).join("");
       document.getElementById("marquee-track").innerHTML = seq + seq;
 
       // featured products
