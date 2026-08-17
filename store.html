@@ -18,7 +18,7 @@
       <div class="container" style="position:relative">
         <h1><span class="grad" data-i18n="storeTitle"></span> 🛍️</h1>
         <p data-i18n="storeSub"></p>
-        <img class="corner-oc" src="assets/img/oc-pointing.png" alt="">
+        <img class="corner-oc" data-img="storeCorner" src="assets/img/oc-pointing.png" alt="">
       </div>
     </section>
 
@@ -28,7 +28,7 @@
         <div class="pills" id="cat-pills"></div>
         <div class="grid" id="product-grid"></div>
         <div class="empty-note" id="no-results" style="display:none">
-          <img src="assets/img/oc-thinking.png" alt="">
+          <img data-img="cartEmpty" src="assets/img/oc-thinking.png" alt="">
           <p><b data-i18n="noResults"></b></p>
         </div>
       </div>
@@ -48,10 +48,12 @@
       const badge = !p.inStock
         ? `<span class="badge soldout">${t("soldOut")}</span>`
         : (p.featured ? `<span class="badge">${t("featBadge")}</span>` : "");
+      const cover = (p.images && p.images.length) ? p.images[0] : p.img;
+      const url = `product.html?id=${encodeURIComponent(p.id)}`;
       return `<article class="card reveal shown">
-        <div class="thumb"><img src="${esc(p.img)}" alt="${esc(loc(p, "name"))}" loading="lazy">${badge}</div>
+        <a class="thumb" href="${url}" style="display:block"><img src="${esc(cover)}" alt="${esc(loc(p, "name"))}" loading="lazy">${badge}</a>
         <div class="card-body">
-          <h3>${esc(loc(p, "name"))}</h3>
+          <h3><a href="${url}" style="color:inherit">${esc(loc(p, "name"))}</a></h3>
           <p class="desc">${esc(loc(p, "desc"))}</p>
           <div class="card-foot">
             <span class="price">$${p.price}</span>
@@ -84,7 +86,8 @@
       document.getElementById("product-grid").innerHTML = items.map(productCard).join("");
       const none = document.getElementById("no-results");
       none.style.display = items.length ? "none" : "block";
-      if (!items.length && q) mascotSay(t("mascotSearchEmpty"), "oc-thinking.png");
+      if (!items.length && q) mascotSay(t("mascotSearchEmpty"), "mascotThinking");
+      applyImages();
     }
 
     document.getElementById("search").addEventListener("input", e => { query = e.target.value; renderStore(); });

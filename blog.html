@@ -18,7 +18,7 @@
       <div class="container" style="position:relative">
         <h1><span class="grad" data-i18n="blogTitle"></span> ✏️</h1>
         <p data-i18n="blogSub"></p>
-        <img class="corner-oc" src="assets/img/oc-gaming.png" alt="">
+        <img class="corner-oc" data-img="blogCorner" src="assets/img/oc-gaming.png" alt="">
       </div>
     </section>
 
@@ -42,8 +42,14 @@
       return m ? m[1] : null;
     }
 
+    function igPath(url) {
+      const m = String(url || "").match(/instagram\.com\/(?:[\w.]+\/)?(reel|p|tv)\/([\w-]+)/);
+      return m ? `${m[1]}/${m[2]}` : null;
+    }
+
     function postCard(p) {
       const vid = ytId(p.youtube);
+      const ig = igPath(p.instagram);
       return `<article class="post reveal shown" id="${esc(p.id)}">
         ${p.img ? `<div class="thumb"><img src="${esc(p.img)}" alt="" loading="lazy"></div>` : ""}
         <div class="post-body">
@@ -52,6 +58,8 @@
           <p style="white-space:pre-line">${esc(loc(p, "body"))}</p>
           ${vid ? `<div class="yt-embed"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="YouTube video" allowfullscreen loading="lazy"></iframe></div>`
                 : (p.youtube ? `<a class="btn btn-gold btn-sm" href="${esc(p.youtube)}" target="_blank" rel="noopener">${t("watchVideo")}</a>` : "")}
+          ${ig ? `<div class="ig-embed"><iframe src="https://www.instagram.com/${ig}/embed/" title="Instagram" loading="lazy" allowfullscreen scrolling="no"></iframe></div>
+                 <a class="btn btn-ghost btn-sm" href="${esc(p.instagram)}" target="_blank" rel="noopener" style="align-self:center">${t("watchOnIg")}</a>` : ""}
           ${p.link ? `<a class="btn btn-ghost btn-sm" href="${esc(p.link)}" target="_blank" rel="noopener">${t("openLink")}</a>` : ""}
           <span class="tag" style="align-self:flex-start">#${t(p.tag) !== p.tag ? t(p.tag) : esc(p.tag)}</span>
         </div>
@@ -72,6 +80,7 @@
 
       const shown = posts.filter(p => activeTag === "all" || p.tag === activeTag);
       document.getElementById("post-grid").innerHTML = shown.map(postCard).join("");
+      applyImages();
 
       // deep-link scroll
       if (location.hash) {

@@ -29,7 +29,7 @@
     function artSide() {
       return `<div class="hero-art">
         <div class="halo"></div>
-        <img class="mascot-main" src="assets/img/oc-giving.png" alt="Aya reaching out">
+        <img class="mascot-main" src="${esc(img("accountArt"))}" alt="Aya reaching out">
         <span class="floaty" style="top:6%;left:10%">✦</span>
         <span class="floaty" style="bottom:10%;right:8%;animation-delay:1.8s">💜</span>
       </div>`;
@@ -101,7 +101,7 @@
         LS.set("ayaya_session", { name, email, isAdmin: false, joined: user.joined });
         msg(t("okSignup"), true);
         confettiBurst();
-        mascotSay(t("okSignup"), "oc-giving.png");
+        mascotSay(t("okSignup"), "mascotHappy");
         setTimeout(() => { renderChrome(); renderAccount(); }, 1200);
       } else {
         if (!email || !pass) return msg(t("errFill"));
@@ -112,7 +112,7 @@
         LS.set("ayaya_session", { name: user.name, email: user.email, isAdmin: !!user.isAdmin, joined: user.joined });
         renderChrome();
         renderAccount();
-        mascotSay(t("welcomeBack") + ", " + user.name + "!", "oc-giving.png");
+        mascotSay(t("welcomeBack") + ", " + user.name + "!", "mascotHappy");
       }
     }
 

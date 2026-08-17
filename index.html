@@ -28,7 +28,7 @@
         </div>
         <div class="hero-art">
           <div class="halo"></div>
-          <img class="mascot-main" src="assets/img/logo.png" alt="Aya mascot giving a thumbs up">
+          <img class="mascot-main" data-img="hero" src="assets/img/logo.png" alt="Aya mascot giving a thumbs up">
           <span class="floaty" style="top:8%;left:6%;animation-delay:.5s">🎮</span>
           <span class="floaty" style="top:16%;right:4%;animation-delay:1.4s">✦</span>
           <span class="floaty" style="bottom:12%;left:12%;animation-delay:2.2s">💜</span>
@@ -58,7 +58,7 @@
     <section class="block" style="padding-top:0">
       <div class="container">
         <div class="about-strip reveal">
-          <img src="assets/img/oc-cozy.png" alt="Aya sitting cozy">
+          <img data-img="about" src="assets/img/oc-cozy.png" alt="Aya sitting cozy">
           <div>
             <h2 data-i18n="aboutTitle"></h2>
             <p data-i18n="aboutBody"></p>
@@ -92,10 +92,12 @@
       const stockBadge = p.inStock
         ? `<span class="badge">${t("featBadge")}</span>`
         : `<span class="badge soldout">${t("soldOut")}</span>`;
+      const cover = (p.images && p.images.length) ? p.images[0] : p.img;
+      const url = `product.html?id=${encodeURIComponent(p.id)}`;
       return `<article class="card reveal">
-        <div class="thumb"><img src="${esc(p.img)}" alt="${esc(loc(p, "name"))}" loading="lazy">${stockBadge}</div>
+        <a class="thumb" href="${url}" style="display:block"><img src="${esc(cover)}" alt="${esc(loc(p, "name"))}" loading="lazy">${stockBadge}</a>
         <div class="card-body">
-          <h3>${esc(loc(p, "name"))}</h3>
+          <h3><a href="${url}" style="color:inherit">${esc(loc(p, "name"))}</a></h3>
           <p class="desc">${esc(loc(p, "desc"))}</p>
           <div class="card-foot">
             <span class="price">$${p.price}</span>
@@ -137,8 +139,9 @@
       document.getElementById("about-socials").innerHTML = `
         <a href="${esc(s.youtube)}" target="_blank" rel="noopener" class="btn btn-gold btn-sm">▶ ${t("aboutCta")}</a>
         <a href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>
-        <a href="${esc(s.tiktok)}" target="_blank" rel="noopener">🎵 TikTok</a>`;
+        ${s.tiktok ? `<a href="${esc(s.tiktok)}" target="_blank" rel="noopener">🎵 TikTok</a>` : ""}`;
 
+      applyImages();
       watchReveals();
     }
 

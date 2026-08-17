@@ -74,7 +74,32 @@ const I = {
     rights: "AyaYa Store — all loot handcrafted.",
     newBadge: "NEW ✦", featBadge: "★ Featured",
     by: "by Aya", readMore: "Read more ↗", close: "Close",
-    accWho: "Logged in as", accAdmin: "You're the admin! ✦", goAdmin: "Open admin panel"
+    accWho: "Logged in as", accAdmin: "You're the admin! ✦", goAdmin: "Open admin panel",
+    tabTexts: "Texts", tabImages: "Images",
+    textsHint: "Change any wording on the site — English and Arabic side by side. Empty = use the default.",
+    searchTexts: "Search texts…",
+    mascotEditor: "Mascot phrases (shown when visitors click the mascot)",
+    addPhrase: "+ Add phrase", marqueeEditor: "Moving banner words (one per line)",
+    imagesHint: "Replace any picture on the site by uploading a PNG/JPG (max ~900KB). Don't forget to Export when you're happy!",
+    reset: "Reset", upload: "Upload",
+    imgSlot_logo: "Logo (header & footer)", imgSlot_hero: "Home hero art",
+    imgSlot_about: "About section art", imgSlot_mascot: "Corner mascot (default)",
+    imgSlot_mascotHappy: "Corner mascot (happy)", imgSlot_mascotThinking: "Corner mascot (thinking)",
+    imgSlot_mascotGrumpy: "Corner mascot (grumpy)", imgSlot_storeCorner: "Store page corner art",
+    imgSlot_blogCorner: "Blog page corner art", imgSlot_accountArt: "Account page art",
+    imgSlot_orderArt: "Order screen art", imgSlot_cartEmpty: "Empty cart art",
+    tgSend: "Send via Telegram 🚀", tgSending: "Sending…",
+    tgSent: "Order flew to Aya's Telegram! 🎉 She'll reply soon 💜",
+    tgFail: "Couldn't send automatically — copy the order and send it by DM instead 🙏",
+    tgDm: "💬 DM on Telegram",
+    sTgToken: "Telegram bot token (from @BotFather)", sTgChatId: "Telegram chat id (from @userinfobot)",
+    sTgUsername: "Telegram username (without @) — for the DM button",
+    tgHint: "With token + chat id, orders are sent straight to your Telegram. Note: on a public site the token is visible to visitors — use a bot made just for orders, and revoke it in @BotFather if it's ever abused.",
+    productNotFound: "This item vanished into the gloom… 🌫️", backToStore: "← Back to the store",
+    relatedTitle: "More loot you might like ✦",
+    fMoreImages: "Photos (first = cover, you can add several)", addImage: "+ Add photo",
+    fYoutubeProd: "YouTube video (optional — plays on the product page)",
+    watchOnIg: "📸 Open on Instagram", qtyLabel: "Quantity", buyNow: "Add to cart ✦"
   },
   ar: {
     brandTag: "مصنوع يدويًا بحب ومانا",
@@ -136,13 +161,58 @@ const I = {
     rights: "متجر AyaYa — كل الغنائم مصنوعة يدويًا.",
     newBadge: "جديد ✦", featBadge: "★ مميز",
     by: "بقلم آية", readMore: "اقرأ المزيد ↗", close: "إغلاق",
-    accWho: "مسجل دخول باسم", accAdmin: "إنت الأدمن! ✦", goAdmin: "افتح لوحة الإدارة"
+    accWho: "مسجل دخول باسم", accAdmin: "إنت الأدمن! ✦", goAdmin: "افتح لوحة الإدارة",
+    tabTexts: "النصوص", tabImages: "الصور",
+    textsHint: "غيّر أي عبارة بالموقع — الانكليزي والعربي يم بعض. الفراغ = استخدام النص الأصلي.",
+    searchTexts: "دوّر بالنصوص…",
+    mascotEditor: "عبارات الماسكوت (تظهر لما الزوار يضغطون عليها)",
+    addPhrase: "+ أضف عبارة", marqueeEditor: "كلمات الشريط المتحرك (وحدة بكل سطر)",
+    imagesHint: "بدّل أي صورة بالموقع برفع PNG/JPG (بحدود ٩٠٠KB). لا تنسى تسوي تصدير من فوق بعد ما تخلص!",
+    reset: "إرجاع", upload: "رفع",
+    imgSlot_logo: "اللوغو (الهيدر والفوتر)", imgSlot_hero: "صورة الواجهة الرئيسية",
+    imgSlot_about: "صورة قسم من أنا", imgSlot_mascot: "ماسكوت الزاوية (الأساسية)",
+    imgSlot_mascotHappy: "ماسكوت الزاوية (فرحانة)", imgSlot_mascotThinking: "ماسكوت الزاوية (تفكّر)",
+    imgSlot_mascotGrumpy: "ماسكوت الزاوية (معصبة)", imgSlot_storeCorner: "صورة زاوية المتجر",
+    imgSlot_blogCorner: "صورة زاوية المدونة", imgSlot_accountArt: "صورة صفحة الحساب",
+    imgSlot_orderArt: "صورة شاشة الطلب", imgSlot_cartEmpty: "صورة السلة الفارغة",
+    tgSend: "أرسل عبر تيليغرام 🚀", tgSending: "جاري الإرسال…",
+    tgSent: "الطلب طار لتيليغرام آية! 🎉 راح ترد عليك قريبًا 💜",
+    tgFail: "ما كَدرنا نرسل تلقائيًا — انسخ الطلب ودزه برسالة 🙏",
+    tgDm: "💬 راسلني على تيليغرام",
+    sTgToken: "توكن بوت تيليغرام (من @BotFather)", sTgChatId: "معرف المحادثة (من @userinfobot)",
+    sTgUsername: "يوزر تيليغرام (بدون @) — لزر المراسلة",
+    tgHint: "بوجود التوكن والمعرف، الطلبات توصل مباشرة لتيليغرامك. ملاحظة: بموقع عام التوكن يظهر للزوار — استخدم بوت مخصص للطلبات بس، وسوّي له revoke من @BotFather إذا صار سوء استخدام.",
+    productNotFound: "هذي القطعة اختفت بالظلال… 🌫️", backToStore: "→ رجوع للمتجر",
+    relatedTitle: "غنائم ثانية تعجبك ✦",
+    fMoreImages: "الصور (الأولى = الغلاف، تكَدر تضيف أكثر من وحدة)", addImage: "+ أضف صورة",
+    fYoutubeProd: "فيديو يوتيوب (اختياري — يشتغل بصفحة المنتج)",
+    watchOnIg: "📸 افتح بانستغرام", qtyLabel: "الكمية", buyNow: "أضف للسلة ✦"
   }
 };
 
 let LANG = LS.get("ayaya_lang", "en");
-const t = k => (I[LANG] && I[LANG][k]) ?? I.en[k] ?? k;
+/* admin wording overrides win over the built-in dictionary */
+const getTexts = () => {
+  const base = (typeof DEFAULT_TEXTS !== "undefined") ? DEFAULT_TEXTS : { en: {}, ar: {} };
+  const saved = LS.get("ayaya_texts", {});
+  return { en: { ...base.en, ...(saved.en || {}) }, ar: { ...base.ar, ...(saved.ar || {}) } };
+};
+const setTexts = v => LS.set("ayaya_texts", v);
+const t = k => {
+  const ov = getTexts()[LANG]?.[k];
+  if (ov !== undefined && ov !== "" && ov !== null) return ov;
+  return (I[LANG] && I[LANG][k]) ?? I.en[k] ?? k;
+};
 const loc = (obj, field) => (obj[LANG] && obj[LANG][field]) || (obj.en && obj.en[field]) || "";
+
+/* replaceable site images */
+const getImages = () => ({ ...((typeof DEFAULT_IMAGES !== "undefined") ? DEFAULT_IMAGES : {}), ...LS.get("ayaya_images", {}) });
+const setImages = v => LS.set("ayaya_images", v);
+const img = slot => getImages()[slot] || "assets/img/logo.png";
+/* apply overrides to static <img data-img="slot"> tags */
+function applyImages() {
+  $$("[data-img]").forEach(el => { el.src = img(el.dataset.img); });
+}
 
 function setLang(l) {
   LANG = l;
@@ -150,6 +220,7 @@ function setLang(l) {
   document.documentElement.lang = l;
   document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
   renderChrome();
+  applyImages();
   if (typeof window.onLangChange === "function") window.onLangChange();
 }
 
@@ -205,7 +276,7 @@ function addToCart(id) {
   setCart(cart);
   const badge = $("#cart-count");
   if (badge) { badge.classList.remove("pop"); void badge.offsetWidth; badge.classList.add("pop"); }
-  mascotSay(t("mascotCart"), "oc-giving.png");
+  mascotSay(t("mascotCart"), "mascotHappy");
   toast("🛒 " + t("inCart"));
   renderCartDrawer();
 }
@@ -230,7 +301,7 @@ function renderChrome() {
   $("#site-header").innerHTML = `
     <nav class="nav container">
       <a class="brand" href="index.html">
-        <img src="assets/img/logo.png" alt="AyaYa">
+        <img src="${esc(img("logo"))}" alt="AyaYa">
         <span>Aya<span class="ya">Ya</span> ✦</span>
       </a>
       <button class="burger" id="burger" aria-label="menu">☰</button>
@@ -251,12 +322,13 @@ function renderChrome() {
   $("#site-footer").innerHTML = `
     <div class="container">
       <div class="foot-grid">
-        <a class="brand" href="index.html"><img src="assets/img/logo.png" alt=""><span>Aya<span class="ya">Ya</span></span></a>
+        <a class="brand" href="index.html"><img src="${esc(img("logo"))}" alt=""><span>Aya<span class="ya">Ya</span></span></a>
         <div class="socials">
-          <a href="${esc(s.youtube)}" target="_blank" rel="noopener">▶ YouTube</a>
-          <a href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>
-          <a href="${esc(s.tiktok)}" target="_blank" rel="noopener">🎵 TikTok</a>
+          ${s.youtube ? `<a href="${esc(s.youtube)}" target="_blank" rel="noopener">▶ YouTube</a>` : ""}
+          ${s.instagram ? `<a href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>` : ""}
+          ${s.tiktok ? `<a href="${esc(s.tiktok)}" target="_blank" rel="noopener">🎵 TikTok</a>` : ""}
           ${s.discord ? `<a href="${esc(s.discord)}" target="_blank" rel="noopener">💬 Discord</a>` : ""}
+          ${s.tgUsername ? `<a href="https://t.me/${esc(s.tgUsername)}" target="_blank" rel="noopener">✈️ Telegram</a>` : ""}
         </div>
         <p class="note">${t("footNote")}<br>© 2026 ${t("rights")}</p>
       </div>
@@ -274,14 +346,14 @@ function renderChrome() {
       </aside>
       <div id="mascot-helper">
         <div id="mascot-bubble"></div>
-        <img id="mascot-img" src="assets/img/oc-pointing-up.png" alt="Aya mascot">
+        <img id="mascot-img" src="${esc(img("mascot"))}" alt="Aya mascot">
       </div>
       <div id="toast"></div>`);
     $("#overlay").addEventListener("click", closeDrawer);
     $("#cart-close").addEventListener("click", closeDrawer);
     $("#mascot-img").addEventListener("click", () => {
       const facts = t("mascotFacts");
-      mascotSay(facts[Math.floor(Math.random() * facts.length)]);
+      if (Array.isArray(facts) && facts.length) mascotSay(facts[Math.floor(Math.random() * facts.length)]);
     });
   }
   $("#cart-title").textContent = t("cart");
@@ -304,7 +376,7 @@ function renderCartDrawer() {
   const products = getProducts();
   if (!cart.length) {
     body.innerHTML = `<div class="empty-note">
-      <img src="assets/img/oc-thinking.png" alt="">
+      <img src="${esc(img("cartEmpty"))}" alt="">
       <p><b>${t("cartEmpty")}</b></p><p>${t("cartEmptySub")}</p></div>`;
     foot.innerHTML = "";
     return;
@@ -360,11 +432,14 @@ function showOrderModal() {
   const orderText = `🛍 AyaYa Store order:\n${lines}\n${t("total")}: $${total}` + (user ? `\n👤 ${user.name}` : "");
 
   const body = $("#cart-body"), foot = $("#cart-foot");
+  const canBot = s.tgToken && s.tgChatId;
   body.innerHTML = `<div style="display:flex;flex-direction:column;gap:14px">
-    <img src="assets/img/oc-giving.png" style="width:120px;margin-inline:auto" alt="">
+    <img src="${esc(img("orderArt"))}" style="width:120px;margin-inline:auto" alt="">
     <h3 style="text-align:center">${t("orderTitle")}</h3>
     <p style="color:var(--muted);text-align:center">${t("orderHint")}</p>
     <textarea readonly id="order-text" style="width:100%;min-height:140px;background:var(--bg-2);color:var(--text);border:1px solid var(--line);border-radius:14px;padding:12px;font-family:inherit">${esc(orderText)}</textarea>
+    ${canBot ? `<button class="btn btn-gold" id="tg-send">${t("tgSend")}</button>` : ""}
+    ${s.tgUsername ? `<a class="btn btn-ghost" id="tg-dm" href="https://t.me/${esc(s.tgUsername)}" target="_blank" rel="noopener">${t("tgDm")}</a>` : ""}
     <button class="btn btn-primary" id="copy-order">${t("copyOrder")}</button>
     <div class="socials" style="justify-content:center">
       <a href="${esc(s.instagram)}" target="_blank" rel="noopener">📸 Instagram</a>
@@ -377,6 +452,29 @@ function showOrderModal() {
     try { await navigator.clipboard.writeText(ta.value); } catch { document.execCommand("copy"); }
     $("#copy-order").textContent = t("copied");
     confettiBurst();
+  });
+  if (canBot) $("#tg-send").addEventListener("click", async () => {
+    const btn = $("#tg-send");
+    btn.disabled = true;
+    btn.textContent = t("tgSending");
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${encodeURIComponent(s.tgToken)}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: s.tgChatId, text: $("#order-text").value })
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.description || "telegram error");
+      btn.textContent = "✓ " + t("tgSent");
+      mascotSay(t("tgSent"), "mascotHappy");
+      setCart([]);
+      confettiBurst();
+      setTimeout(closeDrawer, 2600);
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = t("tgSend");
+      toast(t("tgFail"));
+    }
   });
 }
 
@@ -392,15 +490,15 @@ function toast(msg) {
 
 let mascotTimer;
 function mascotSay(msg, pose) {
-  const bubble = $("#mascot-bubble"), img = $("#mascot-img");
+  const bubble = $("#mascot-bubble"), mimg = $("#mascot-img");
   if (!bubble) return;
-  if (pose) img.src = "assets/img/" + pose;
+  if (pose) mimg.src = img(pose);
   bubble.textContent = msg;
   bubble.classList.add("show");
   clearTimeout(mascotTimer);
   mascotTimer = setTimeout(() => {
     bubble.classList.remove("show");
-    img.src = "assets/img/oc-pointing-up.png";
+    mimg.src = img("mascot");
   }, 3500);
 }
 
@@ -446,7 +544,7 @@ function mascotSay(msg, pose) {
     i = (e.key === seq[i]) ? i + 1 : (e.key === seq[0] ? 1 : 0);
     if (i === seq.length) {
       i = 0;
-      mascotSay(t("mascotKonami"), "oc-grumpy.png");
+      mascotSay(t("mascotKonami"), "mascotGrumpy");
       controllerRain();
     }
   });
@@ -483,6 +581,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
   await seedAdmin();
   renderChrome();
+  applyImages();
   watchReveals();
   if (!sessionStorage.getItem("ayaya_greeted")) {
     sessionStorage.setItem("ayaya_greeted", "1");

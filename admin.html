@@ -33,6 +33,8 @@
   <script>
     let tab = "products";
     let editing = null; // {type:'product'|'post', id or null}
+    let textQuery = "";
+    let formImages = []; // product form gallery working copy
 
     /* ---------- guards ---------- */
     function renderAdmin() {
@@ -40,7 +42,7 @@
       const root = document.getElementById("admin-root");
       if (!isAdmin()) {
         root.innerHTML = `<div class="form-card" style="max-width:480px;margin-inline:auto;text-align:center">
-          <img src="assets/img/oc-grumpy.png" style="width:150px;margin:0 auto 14px" alt="">
+          <img src="${esc(img("mascotGrumpy"))}" style="width:150px;margin:0 auto 14px" alt="">
           <h2>⛔ ${t("adminOnly")}</h2><br>
           <a class="btn btn-primary" href="account.html">${t("login")}</a>
         </div>`;
@@ -50,6 +52,8 @@
         <div class="admin-tabs">
           <button class="pill${tab === "products" ? " active" : ""}" data-tab="products">🛍 ${t("tabProducts")}</button>
           <button class="pill${tab === "posts" ? " active" : ""}" data-tab="posts">✏️ ${t("tabPosts")}</button>
+          <button class="pill${tab === "texts" ? " active" : ""}" data-tab="texts">🔤 ${t("tabTexts")}</button>
+          <button class="pill${tab === "images" ? " active" : ""}" data-tab="images">🖼 ${t("tabImages")}</button>
           <button class="pill${tab === "settings" ? " active" : ""}" data-tab="settings">⚙️ ${t("tabSettings")}</button>
           <span style="flex:1"></span>
           <button class="btn btn-gold btn-sm" id="export-btn">${t("exportData")}</button>
@@ -60,7 +64,17 @@
       document.getElementById("export-btn").addEventListener("click", exportData);
       if (tab === "products") renderProducts();
       else if (tab === "posts") renderPostsTab();
+      else if (tab === "texts") renderTextsTab();
+      else if (tab === "images") renderImagesTab();
       else renderSettings();
+    }
+
+    /* ---------- shared image reading ---------- */
+    function readFileAsDataURL(file, cb) {
+      if (file.size > 900 * 1024) { alert("Image too big (max ~900KB) — please resize it first."); return; }
+      const r = new FileReader();
+      r.onload = () => cb(r.result);
+      r.readAsDataURL(file);
     }
 
     /* ---------- products ---------- */
@@ -68,12 +82,13 @@
       const body = document.getElementById("tab-body");
       if (editing && editing.type === "product") return renderProductForm(body);
       const products = getProducts();
+      const cover = p => (p.images && p.images.length) ? p.images[0] : p.img;
       body.innerHTML = `
         <div style="margin-bottom:16px"><button class="btn btn-primary btn-sm" id="add-product">${t("addProduct")}</button></div>
         <div class="table-wrap"><table class="admin">
           <tr><th>${t("thPhoto")}</th><th>${t("thName")}</th><th>${t("thPrice")}</th><th>${t("thCat")}</th><th>${t("thStock")}</th><th>${t("thActions")}</th></tr>
           ${products.map(p => `<tr>
-            <td><img src="${esc(p.img)}" alt=""></td>
+            <td><img src="${esc(cover(p))}" alt=""></td>
             <td><b>${esc(p.en.name)}</b><br><span style="color:var(--muted)">${esc(p.ar.name)}</span></td>
             <td class="price">$${p.price}</td>
             <td>${t(p.category)}</td>
@@ -83,8 +98,13 @@
               <button class="btn btn-danger btn-sm" data-del="${p.id}">${t("del")}</button>
             </td></tr>`).join("")}
         </table></div>`;
-      document.getElementById("add-product").addEventListener("click", () => { editing = { type: "product", id: null }; renderAdmin(); });
-      document.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => { editing = { type: "product", id: b.dataset.edit }; renderAdmin(); }));
+      document.getElementById("add-product").addEventListener("click", () => { editing = { type: "product", id: null }; formImages = []; renderAdmin(); });
+      document.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => {
+        editing = { type: "product", id: b.dataset.edit };
+        const p = getProducts().find(x => x.id === b.dataset.edit);
+        formImages = p ? [...(p.images && p.images.length ? p.images : [p.img])] : [];
+        renderAdmin();
+      }));
       document.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => {
         if (!confirm(t("confirmDel"))) return;
         setProducts(getProducts().filter(p => p.id !== b.dataset.del));
@@ -92,25 +112,36 @@
       }));
     }
 
-    function imgField(current) {
-      return `<div class="field"><label>${t("fImg")} <small>(${t("fImgHint")})</small></label>
-        <input id="f-img" type="text" value="${esc(current || "")}" placeholder="assets/img/… or https://…">
-        <input id="f-img-file" type="file" accept="image/*" style="margin-top:8px">
-        ${current ? `<img src="${esc(current)}" style="width:90px;border-radius:12px;margin-top:8px">` : ""}
+    function galleryEditor() {
+      return `<div class="field"><label>${t("fMoreImages")}</label>
+        <div class="gallery-thumbs" id="form-gallery">
+          ${formImages.map((src, i) => `<div style="position:relative">
+            <img src="${esc(src)}" class="${i === 0 ? "active" : ""}" alt="">
+            <button type="button" data-rmimg="${i}" style="position:absolute;top:-6px;inset-inline-end:-6px;background:var(--magenta);color:#fff;border:none;border-radius:999px;width:22px;height:22px;cursor:pointer;font-weight:800">✕</button>
+          </div>`).join("")}
+        </div>
+        <input id="f-img-file" type="file" accept="image/*" multiple style="margin-top:10px">
+        <input id="f-img-url" type="text" placeholder="…or paste an image URL and press ${t("addImage")}" style="margin-top:8px">
+        <button type="button" class="btn btn-ghost btn-sm" id="add-img-url" style="margin-top:8px">${t("addImage")}</button>
       </div>`;
     }
 
-    function readImgFile(cb) {
-      const file = document.getElementById("f-img-file").files[0];
-      if (!file) return cb(document.getElementById("f-img").value.trim());
-      if (file.size > 900 * 1024) { alert("Image too big (max ~900KB) — please resize it first."); return; }
-      const r = new FileReader();
-      r.onload = () => cb(r.result);
-      r.readAsDataURL(file);
+    function bindGalleryEditor(rerender) {
+      document.querySelectorAll("[data-rmimg]").forEach(b => b.addEventListener("click", () => {
+        formImages.splice(Number(b.dataset.rmimg), 1);
+        rerender();
+      }));
+      document.getElementById("f-img-file").addEventListener("change", e => {
+        [...e.target.files].forEach(f => readFileAsDataURL(f, url => { formImages.push(url); rerender(); }));
+      });
+      document.getElementById("add-img-url").addEventListener("click", () => {
+        const v = document.getElementById("f-img-url").value.trim();
+        if (v) { formImages.push(v); rerender(); }
+      });
     }
 
     function renderProductForm(body) {
-      const p = getProducts().find(x => x.id === editing.id) || { id: "", img: "", price: 10, category: "paintings", featured: false, inStock: true, en: { name: "", desc: "" }, ar: { name: "", desc: "" } };
+      const p = getProducts().find(x => x.id === editing.id) || { id: "", img: "", images: [], price: 10, category: "paintings", featured: false, inStock: true, youtube: "", en: { name: "", desc: "" }, ar: { name: "", desc: "" } };
       body.innerHTML = `<div class="form-card" style="max-width:680px">
         <h2>${editing.id ? t("edit") : t("addProduct")}</h2><br>
         <div class="field"><label>${t("fNameEn")}</label><input id="f-name-en" value="${esc(p.en.name)}"></div>
@@ -120,36 +151,40 @@
         <div class="field"><label>${t("fPrice")}</label><input id="f-price" type="number" min="0" step="1" value="${p.price}"></div>
         <div class="field"><label>${t("fCat")}</label>
           <select id="f-cat">${["paintings", "crafts", "stickers", "commissions"].map(c => `<option value="${c}"${p.category === c ? " selected" : ""}>${t(c)}</option>`).join("")}</select></div>
-        ${imgField(p.img)}
+        ${galleryEditor()}
+        <div class="field"><label>${t("fYoutubeProd")}</label><input id="f-youtube" value="${esc(p.youtube || "")}" placeholder="https://youtube.com/watch?v=…"></div>
         <div class="field"><label><input type="checkbox" id="f-featured"${p.featured ? " checked" : ""}> ${t("fFeatured")}</label></div>
         <div class="field"><label><input type="checkbox" id="f-stock"${p.inStock ? " checked" : ""}> ${t("fStock")}</label></div>
         <div style="display:flex;gap:10px">
           <button class="btn btn-primary" id="save-product">${t("save")}</button>
           <button class="btn btn-ghost" id="cancel-edit">${t("cancel")}</button>
         </div></div>`;
+      const rerender = () => renderProductForm(body);
+      bindGalleryEditor(rerender);
       document.getElementById("cancel-edit").addEventListener("click", () => { editing = null; renderAdmin(); });
       document.getElementById("save-product").addEventListener("click", () => {
-        readImgFile(img => {
-          const nameEn = document.getElementById("f-name-en").value.trim();
-          if (!nameEn) return alert(t("errFill"));
-          const products = getProducts();
-          const item = {
-            id: editing.id || nameEn.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36),
-            img: img || "assets/img/logo.png",
-            price: Number(document.getElementById("f-price").value) || 0,
-            category: document.getElementById("f-cat").value,
-            featured: document.getElementById("f-featured").checked,
-            inStock: document.getElementById("f-stock").checked,
-            en: { name: nameEn, desc: document.getElementById("f-desc-en").value.trim() },
-            ar: { name: document.getElementById("f-name-ar").value.trim() || nameEn, desc: document.getElementById("f-desc-ar").value.trim() }
-          };
-          const i = products.findIndex(x => x.id === editing.id);
-          if (i >= 0) products[i] = item; else products.push(item);
-          setProducts(products);
-          editing = null;
-          toast("✓ " + t("save"));
-          renderAdmin();
-        });
+        const nameEn = document.getElementById("f-name-en").value.trim();
+        if (!nameEn) return alert(t("errFill"));
+        const products = getProducts();
+        const imgs = formImages.length ? formImages : ["assets/img/logo.png"];
+        const item = {
+          id: editing.id || nameEn.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36),
+          img: imgs[0],
+          images: imgs,
+          price: Number(document.getElementById("f-price").value) || 0,
+          category: document.getElementById("f-cat").value,
+          featured: document.getElementById("f-featured").checked,
+          inStock: document.getElementById("f-stock").checked,
+          youtube: document.getElementById("f-youtube").value.trim(),
+          en: { name: nameEn, desc: document.getElementById("f-desc-en").value.trim() },
+          ar: { name: document.getElementById("f-name-ar").value.trim() || nameEn, desc: document.getElementById("f-desc-ar").value.trim() }
+        };
+        const i = products.findIndex(x => x.id === editing.id);
+        if (i >= 0) products[i] = item; else products.push(item);
+        setProducts(products);
+        editing = null;
+        toast("✓ " + t("save"));
+        renderAdmin();
       });
     }
 
@@ -163,7 +198,7 @@
         <div class="table-wrap"><table class="admin">
           <tr><th>${t("thPhoto")}</th><th>${t("thTitle")}</th><th>${t("thDate")}</th><th>${t("fTag")}</th><th>${t("thActions")}</th></tr>
           ${posts.map(p => `<tr>
-            <td>${p.img ? `<img src="${esc(p.img)}" alt="">` : "📝"}</td>
+            <td>${p.img ? `<img src="${esc(p.img)}" alt="">` : (p.youtube ? "▶️" : p.instagram ? "📸" : "📝")}</td>
             <td><b>${esc(p.en.title)}</b><br><span style="color:var(--muted)">${esc(p.ar.title)}</span></td>
             <td>${p.date}</td><td>#${esc(p.tag)}</td>
             <td style="white-space:nowrap">
@@ -181,7 +216,7 @@
     }
 
     function renderPostForm(body) {
-      const p = getPosts().find(x => x.id === editing.id) || { id: "", date: new Date().toISOString().slice(0, 10), img: "", tag: "drawings", youtube: "", link: "", en: { title: "", body: "" }, ar: { title: "", body: "" } };
+      const p = getPosts().find(x => x.id === editing.id) || { id: "", date: new Date().toISOString().slice(0, 10), img: "", tag: "drawings", youtube: "", instagram: "", link: "", en: { title: "", body: "" }, ar: { title: "", body: "" } };
       body.innerHTML = `<div class="form-card" style="max-width:680px">
         <h2>${editing.id ? t("edit") : t("addPost")}</h2><br>
         <div class="field"><label>${t("fTitleEn")}</label><input id="f-title-en" value="${esc(p.en.title)}"></div>
@@ -191,24 +226,30 @@
         <div class="field"><label>${t("fDate")}</label><input id="f-date" type="date" value="${p.date}"></div>
         <div class="field"><label>${t("fTag")}</label><input id="f-tag" value="${esc(p.tag)}" placeholder="drawings / paintings / gaming…"></div>
         <div class="field"><label>${t("fYoutube")}</label><input id="f-youtube" value="${esc(p.youtube)}" placeholder="https://youtube.com/watch?v=…"></div>
+        <div class="field"><label>📸 Instagram</label><input id="f-instagram" value="${esc(p.instagram || "")}" placeholder="https://www.instagram.com/reel/…"></div>
         <div class="field"><label>${t("fLink")}</label><input id="f-link" value="${esc(p.link)}" placeholder="https://…"></div>
-        ${imgField(p.img)}
+        <div class="field"><label>${t("fImg")} <small>(${t("fImgHint")})</small></label>
+          <input id="f-img" type="text" value="${esc(p.img || "")}" placeholder="assets/img/… or https://…">
+          <input id="f-img-file" type="file" accept="image/*" style="margin-top:8px">
+          ${p.img ? `<img src="${esc(p.img)}" style="width:90px;border-radius:12px;margin-top:8px">` : ""}
+        </div>
         <div style="display:flex;gap:10px">
           <button class="btn btn-primary" id="save-post">${t("save")}</button>
           <button class="btn btn-ghost" id="cancel-edit">${t("cancel")}</button>
         </div></div>`;
       document.getElementById("cancel-edit").addEventListener("click", () => { editing = null; renderAdmin(); });
       document.getElementById("save-post").addEventListener("click", () => {
-        readImgFile(img => {
+        const finish = imgUrl => {
           const titleEn = document.getElementById("f-title-en").value.trim();
           if (!titleEn) return alert(t("errFill"));
           const posts = getPosts();
           const item = {
             id: editing.id || titleEn.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36),
             date: document.getElementById("f-date").value || new Date().toISOString().slice(0, 10),
-            img,
+            img: imgUrl,
             tag: document.getElementById("f-tag").value.trim() || "blog",
             youtube: document.getElementById("f-youtube").value.trim(),
+            instagram: document.getElementById("f-instagram").value.trim(),
             link: document.getElementById("f-link").value.trim(),
             en: { title: titleEn, body: document.getElementById("f-body-en").value.trim() },
             ar: { title: document.getElementById("f-title-ar").value.trim() || titleEn, body: document.getElementById("f-body-ar").value.trim() }
@@ -219,8 +260,168 @@
           editing = null;
           toast("✓ " + t("save"));
           renderAdmin();
-        });
+        };
+        const file = document.getElementById("f-img-file").files[0];
+        if (file) readFileAsDataURL(file, finish);
+        else finish(document.getElementById("f-img").value.trim());
       });
+    }
+
+    /* ---------- texts (wording) tab ---------- */
+    function textKeys() {
+      // all editable string keys from the built-in dictionary
+      return Object.keys(I.en).filter(k => typeof I.en[k] === "string");
+    }
+
+    function renderTextsTab() {
+      const body = document.getElementById("tab-body");
+      const saved = LS.get("ayaya_texts", { en: {}, ar: {} });
+      const facts = (saved[LANG === "ar" ? "ar" : "en"]?.mascotFacts);
+      const factsEn = saved.en?.mascotFacts || I.en.mascotFacts;
+      const factsAr = saved.ar?.mascotFacts || I.ar.mascotFacts;
+      const marqueeEn = saved.en?.marquee || I.en.marquee;
+      const marqueeAr = saved.ar?.marquee || I.ar.marquee;
+      const q = textQuery.trim().toLowerCase();
+      const keys = textKeys().filter(k =>
+        !q || k.toLowerCase().includes(q) ||
+        String(I.en[k]).toLowerCase().includes(q) ||
+        String(I.ar[k] || "").toLowerCase().includes(q) ||
+        String(saved.en?.[k] || "").toLowerCase().includes(q) ||
+        String(saved.ar?.[k] || "").toLowerCase().includes(q));
+
+      body.innerHTML = `
+        <p class="hint" style="color:var(--muted);margin-bottom:14px">${t("textsHint")}</p>
+
+        <div class="form-card" style="margin-bottom:24px">
+          <h3 style="margin-bottom:10px">💬 ${t("mascotEditor")}</h3>
+          <div id="facts-list">
+            ${factsEn.map((f, i) => `<div class="texts-row">
+              <span class="tkey">#${i + 1} <button data-rmfact="${i}" class="icon-btn" style="font-size:1rem" title="${t("del")}">🗑</button></span>
+              <input data-fact-en="${i}" value="${esc(f)}" placeholder="English">
+              <input data-fact-ar="${i}" dir="rtl" value="${esc(factsAr[i] || "")}" placeholder="عربي">
+            </div>`).join("")}
+          </div>
+          <button class="btn btn-ghost btn-sm" id="add-fact" style="margin-top:12px">${t("addPhrase")}</button>
+
+          <h3 style="margin:26px 0 10px">🎏 ${t("marqueeEditor")}</h3>
+          <div class="texts-row" style="grid-template-columns:1fr 1fr">
+            <textarea id="marquee-en" rows="6">${esc(marqueeEn.join("\n"))}</textarea>
+            <textarea id="marquee-ar" dir="rtl" rows="6">${esc(marqueeAr.join("\n"))}</textarea>
+          </div>
+        </div>
+
+        <div class="searchbar">🔍 <input id="text-search" value="${esc(textQuery)}" placeholder="${t("searchTexts")}"></div>
+        <div class="form-card">
+          <div class="texts-row" style="border-bottom:2px solid var(--purple)">
+            <b class="tkey">key</b><b>English</b><b dir="rtl">عربي</b>
+          </div>
+          ${keys.map(k => `<div class="texts-row">
+            <span class="tkey">${esc(k)}</span>
+            <input data-ten="${esc(k)}" value="${esc(saved.en?.[k] ?? "")}" placeholder="${esc(I.en[k])}" class="${saved.en?.[k] ? "changed" : ""}">
+            <input data-tar="${esc(k)}" dir="rtl" value="${esc(saved.ar?.[k] ?? "")}" placeholder="${esc(I.ar[k] || "")}" class="${saved.ar?.[k] ? "changed" : ""}">
+          </div>`).join("")}
+        </div>
+        <div style="position:sticky;bottom:14px;margin-top:18px;text-align:center">
+          <button class="btn btn-primary" id="save-texts" style="box-shadow:var(--shadow)">${t("save")} ✦</button>
+        </div>`;
+
+      const search = document.getElementById("text-search");
+      search.addEventListener("input", e => {
+        textQuery = e.target.value;
+        clearTimeout(search._t);
+        search._t = setTimeout(() => { renderTextsTab(); document.getElementById("text-search").focus(); }, 350);
+      });
+      document.getElementById("add-fact").addEventListener("click", () => {
+        saveTextsFromForm(false);
+        const s2 = LS.get("ayaya_texts", { en: {}, ar: {} });
+        s2.en = s2.en || {}; s2.ar = s2.ar || {};
+        s2.en.mascotFacts = [...(s2.en.mascotFacts || I.en.mascotFacts), ""];
+        s2.ar.mascotFacts = [...(s2.ar.mascotFacts || I.ar.mascotFacts), ""];
+        setTexts(s2);
+        renderTextsTab();
+      });
+      document.querySelectorAll("[data-rmfact]").forEach(b => b.addEventListener("click", () => {
+        saveTextsFromForm(false);
+        const i = Number(b.dataset.rmfact);
+        const s2 = LS.get("ayaya_texts", { en: {}, ar: {} });
+        s2.en = s2.en || {}; s2.ar = s2.ar || {};
+        const en = [...(s2.en.mascotFacts || I.en.mascotFacts)];
+        const ar = [...(s2.ar.mascotFacts || I.ar.mascotFacts)];
+        en.splice(i, 1); ar.splice(i, 1);
+        s2.en.mascotFacts = en; s2.ar.mascotFacts = ar;
+        setTexts(s2);
+        renderTextsTab();
+      }));
+      document.getElementById("save-texts").addEventListener("click", () => {
+        saveTextsFromForm(true);
+        renderChrome();
+        applyImages();
+      });
+    }
+
+    function saveTextsFromForm(notify) {
+      const saved = LS.get("ayaya_texts", { en: {}, ar: {} });
+      saved.en = saved.en || {}; saved.ar = saved.ar || {};
+      document.querySelectorAll("[data-ten]").forEach(inp => {
+        const k = inp.dataset.ten, v = inp.value.trim();
+        if (v) saved.en[k] = v; else delete saved.en[k];
+      });
+      document.querySelectorAll("[data-tar]").forEach(inp => {
+        const k = inp.dataset.tar, v = inp.value.trim();
+        if (v) saved.ar[k] = v; else delete saved.ar[k];
+      });
+      // mascot facts
+      const fe = [...document.querySelectorAll("[data-fact-en]")].map(i => i.value.trim());
+      const fa = [...document.querySelectorAll("[data-fact-ar]")].map(i => i.value.trim());
+      if (fe.length) {
+        saved.en.mascotFacts = fe.filter((v, i) => v || fa[i]).map((v, i) => v || fa[i]);
+        saved.ar.mascotFacts = fa.filter((v, i) => v || fe[i]).map((v, i) => v || fe[i]);
+      }
+      // marquee
+      const me = document.getElementById("marquee-en");
+      const ma = document.getElementById("marquee-ar");
+      if (me) saved.en.marquee = me.value.split("\n").map(s => s.trim()).filter(Boolean);
+      if (ma) saved.ar.marquee = ma.value.split("\n").map(s => s.trim()).filter(Boolean);
+      setTexts(saved);
+      if (notify) toast(t("settingsSaved"));
+    }
+
+    /* ---------- images tab ---------- */
+    function renderImagesTab() {
+      const body = document.getElementById("tab-body");
+      const defaults = (typeof DEFAULT_IMAGES !== "undefined") ? DEFAULT_IMAGES : {};
+      const overrides = LS.get("ayaya_images", {});
+      body.innerHTML = `
+        <p class="hint" style="color:var(--muted);margin-bottom:14px">${t("imagesHint")}</p>
+        <div class="form-card">
+          ${Object.keys(defaults).map(slot => `
+            <div class="img-slot-row">
+              <img src="${esc(getImages()[slot])}" alt="">
+              <span class="slot-name">${t("imgSlot_" + slot)} ${overrides[slot] ? "<span style='color:var(--gold)'>●</span>" : ""}</span>
+              <label class="btn btn-ghost btn-sm" style="cursor:pointer">${t("upload")}
+                <input type="file" accept="image/*" data-slot="${slot}" hidden></label>
+              ${overrides[slot] ? `<button class="btn btn-danger btn-sm" data-reset="${slot}">${t("reset")}</button>` : ""}
+            </div>`).join("")}
+        </div>`;
+      document.querySelectorAll("input[data-slot]").forEach(inp => inp.addEventListener("change", e => {
+        const f = e.target.files[0];
+        if (!f) return;
+        readFileAsDataURL(f, url => {
+          const ov = LS.get("ayaya_images", {});
+          ov[inp.dataset.slot] = url;
+          setImages(ov);
+          toast("✓ " + t("save"));
+          renderChrome();
+          renderImagesTab();
+        });
+      }));
+      document.querySelectorAll("[data-reset]").forEach(b => b.addEventListener("click", () => {
+        const ov = LS.get("ayaya_images", {});
+        delete ov[b.dataset.reset];
+        setImages(ov);
+        renderChrome();
+        renderImagesTab();
+      }));
     }
 
     /* ---------- settings ---------- */
@@ -232,6 +433,12 @@
         <div class="field"><label>${t("sTiktok")}</label><input id="s-tiktok" value="${esc(s.tiktok)}"></div>
         <div class="field"><label>${t("sDiscord")}</label><input id="s-discord" value="${esc(s.discord)}"></div>
         <hr style="border-color:var(--line);margin:20px 0">
+        <h3 style="margin-bottom:8px">✈️ Telegram</h3>
+        <p class="hint" style="color:var(--muted)">${t("tgHint")}</p>
+        <div class="field"><label>${t("sTgToken")}</label><input id="s-tgtoken" value="${esc(s.tgToken)}" placeholder="123456:ABC-DEF…"></div>
+        <div class="field"><label>${t("sTgChatId")}</label><input id="s-tgchatid" value="${esc(s.tgChatId)}" placeholder="123456789"></div>
+        <div class="field"><label>${t("sTgUsername")}</label><input id="s-tgusername" value="${esc(s.tgUsername)}" placeholder="ayaya_store"></div>
+        <hr style="border-color:var(--line);margin:20px 0">
         <div class="field"><label>🔑 ${t("password")} (admin)</label><input id="s-pass" type="password" placeholder="••••••"></div>
         <button class="btn btn-primary" id="save-settings">${t("save")}</button>
       </div>`;
@@ -240,7 +447,10 @@
           youtube: document.getElementById("s-youtube").value.trim(),
           instagram: document.getElementById("s-instagram").value.trim(),
           tiktok: document.getElementById("s-tiktok").value.trim(),
-          discord: document.getElementById("s-discord").value.trim()
+          discord: document.getElementById("s-discord").value.trim(),
+          tgToken: document.getElementById("s-tgtoken").value.trim(),
+          tgChatId: document.getElementById("s-tgchatid").value.trim(),
+          tgUsername: document.getElementById("s-tgusername").value.trim().replace(/^@/, "")
         });
         const newPass = document.getElementById("s-pass").value;
         if (newPass) {
@@ -256,11 +466,15 @@
 
     /* ---------- export data.js ---------- */
     function exportData() {
+      const texts = LS.get("ayaya_texts", { en: {}, ar: {} });
+      const images = { ...((typeof DEFAULT_IMAGES !== "undefined") ? DEFAULT_IMAGES : {}), ...LS.get("ayaya_images", {}) };
       const content =
         "/* AyaYa Store content — exported from the admin panel */\n\n" +
         "const DEFAULT_PRODUCTS = " + JSON.stringify(getProducts(), null, 2) + ";\n\n" +
         "const DEFAULT_POSTS = " + JSON.stringify(getPosts(), null, 2) + ";\n\n" +
-        "const DEFAULT_SETTINGS = " + JSON.stringify(getSettings(), null, 2) + ";\n";
+        "const DEFAULT_SETTINGS = " + JSON.stringify(getSettings(), null, 2) + ";\n\n" +
+        "const DEFAULT_IMAGES = " + JSON.stringify(images, null, 2) + ";\n\n" +
+        "const DEFAULT_TEXTS = " + JSON.stringify(texts, null, 2) + ";\n";
       const blob = new Blob([content], { type: "text/javascript" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
